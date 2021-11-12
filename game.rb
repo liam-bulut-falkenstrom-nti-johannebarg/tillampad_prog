@@ -3,8 +3,8 @@ require 'ruby2d'
 require_relative "setup_var.rb"
 require_relative "help_functions.rb"
 
-set width: 400
-set height: 240
+set width: 200
+set height: 120
 set resizable: true
 
 on :key_held do |event|
@@ -36,11 +36,27 @@ on :key_up do |event|
             @down = 0
     end     
 end
-i = 0
+
+# on :mouse_down do |event|
+#     # x and y coordinates of the mouse button event
+#     puts event.x, event.y
+  
+#     # Read the button event
+#     case event.button
+#     when :left
+        
+#     when :middle
+
+#     when :right
+
+#     end
+# end
+
+
 update do
     mousex = get :mouse_x
     mousey = get :mouse_y
-
+    player_center_array = [(@player.x + @player.width/2), (@player.y + @player.height/2)] # Kan komma att ändras i och med att mittpunkten/tyngdpunkten för sprites skiljer sig. 
 
     if (@right - @left).abs == (@down - @up).abs
         @x_dir = (@right - @left) * 0.70 # typ roten ur 2 dividerat på 2
@@ -52,10 +68,8 @@ update do
     @player.x += @x_dir * @walk_speed
     @player.y += @y_dir * @walk_speed
 
-    @player.rotate = i
-    i += 1
-
-
+    @player.rotate = mouse_angle(mousex, mousey, player_center_array)
 end
 
 show
+

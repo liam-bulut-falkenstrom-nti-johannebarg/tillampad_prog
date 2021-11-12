@@ -9,6 +9,15 @@
     time: 100,
 )
 
+@bullet = Sprite.new('sprites\bullet.png',
+    width: 4,
+    height: 4,
+    x: 110,
+    y: 100,
+    loop: true,
+    time: 100
+)
+
 @left = 0
 @right = 0
 @x_dir = 0
