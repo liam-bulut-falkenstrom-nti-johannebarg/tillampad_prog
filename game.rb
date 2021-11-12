@@ -44,7 +44,9 @@ on :mouse_down do |event|
     # Read the button event
     case event.button
     when :left
-        
+        @bullet.x = @player.x+5
+        @bullet.y = @player.y+2
+        @bullet.rotate = @player.rotate
     when :middle
 
     when :right

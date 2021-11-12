@@ -10,8 +10,8 @@
 )
 
 @bullet = Sprite.new('sprites\bullet.png',
-    width: 4,
-    height: 4,
+    width: 16,
+    height: 16,
     x: 110,
     y: 100,
     loop: true,
