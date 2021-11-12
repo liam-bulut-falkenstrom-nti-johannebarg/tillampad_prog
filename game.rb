@@ -68,7 +68,7 @@ update do
     @player.x += @x_dir * @walk_speed
     @player.y += @y_dir * @walk_speed
 
-    @player.rotate = mouse_angle(mousex, mousey, player_center_array)
+    @player.rotate = mouse_angle(mousex, mousey, player_center_array)[0]
 
 
     #Här är debugging kod
