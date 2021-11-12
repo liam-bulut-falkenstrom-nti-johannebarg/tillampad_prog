@@ -77,7 +77,7 @@ update do
         "#{(get :fps).to_i} #{mouse_angle(mousex, mousey, player_center_array).to_i}",
         x: 20, y: 20,
         style: 'bold',
-        size: 20,
+        size: 10,
         color: 'blue',
     )
 end
