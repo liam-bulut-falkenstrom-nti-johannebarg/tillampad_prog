@@ -69,6 +69,17 @@ update do
     @player.y += @y_dir * @walk_speed
 
     @player.rotate = mouse_angle(mousex, mousey, player_center_array)
+
+
+    #Här är debugging kod
+    @text.remove
+    @text = Text.new(
+        "#{(get :fps).to_i} #{mouse_angle(mousex, mousey, player_center_array).to_i}",
+        x: 20, y: 20,
+        style: 'bold',
+        size: 20,
+        color: 'blue',
+    )
 end
 
 show
