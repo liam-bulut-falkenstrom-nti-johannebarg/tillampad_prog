@@ -36,8 +36,12 @@ on :key_up do |event|
             @down = 0
     end     
 end
-
+i = 0
 update do
+    mousex = get :mouse_x
+    mousey = get :mouse_y
+
+
     if (@right - @left).abs == (@down - @up).abs
         @x_dir = (@right - @left) * 0.70 # typ roten ur 2 dividerat på 2
         @y_dir = (@down - @up) * 0.70 
@@ -47,6 +51,9 @@ update do
     end 
     @player.x += @x_dir * @walk_speed
     @player.y += @y_dir * @walk_speed
+
+    @player.rotate = i
+    i += 1
 
 
 end
