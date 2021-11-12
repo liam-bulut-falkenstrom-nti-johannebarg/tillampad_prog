@@ -26,6 +26,7 @@
 @down = 0
 @y_dir = 0
 @walk_speed = 1.5
+@bullet_speed = 10
 
 # Här kommer kod för att skriva ut info på skärmen (typ debugging)
 @text = Text.new(

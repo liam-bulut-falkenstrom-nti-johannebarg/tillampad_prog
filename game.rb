@@ -37,20 +37,20 @@ on :key_up do |event|
     end     
 end
 
-# on :mouse_down do |event|
-#     # x and y coordinates of the mouse button event
-#     puts event.x, event.y
+on :mouse_down do |event|
+    # x and y coordinates of the mouse button event
+    puts event.x, event.y
   
-#     # Read the button event
-#     case event.button
-#     when :left
+    # Read the button event
+    case event.button
+    when :left
         
-#     when :middle
+    when :middle
 
-#     when :right
+    when :right
 
-#     end
-# end
+    end
+end
 
 
 update do
