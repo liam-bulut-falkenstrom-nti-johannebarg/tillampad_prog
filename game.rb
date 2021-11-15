@@ -44,8 +44,14 @@ on :mouse_down do |event|
     # Read the button event
     case event.button
     when :left
-        @bullet.x = @player.x+5
-        @bullet.y = @player.y+2
+
+        # 16 = ((@player.x + @player.width/2) - x)**2 + ((@player.y + @player.height/2) - y)**2 
+        # 1;0
+
+                
+
+        @bullet.x = @player.x + @player.width/2 + Math.cos(mouse_angle(mouse_x, mouse_y, player_center_array)[1])
+        @bullet.y = @player.y + @player.height/2 + Math.sin(mouse_angle(mouse_x, mouse_y, player_center_array)[2])
         @bullet.rotate = @player.rotate
     when :middle
 
@@ -71,7 +77,11 @@ update do
     @player.y += @y_dir * @walk_speed
 
     @player.rotate = mouse_angle(mousex, mousey, player_center_array)[0]
-
+    # @bullet.x += mouse_angle(mousex, mousey, player_center_array)[1]
+    # @bullet.y += mouse_angle(mousex, mousey, player_center_array)[2]
+    @bullet_hitbox.rotate = @bullet.rotate
+    @bullet_hitbox.x = @bullet.x #+ 16
+    @bullet_hitbox.y = @bullet.y #+ 13
 
     #Här är debugging kod
     @text.remove
