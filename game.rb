@@ -86,6 +86,7 @@ update do
     #Här är debugging kod
     @text.remove
     @text = Text.new(
+    #    "#{(get :fps).to_i} #{mouse_angle(mousex, mousey, player_center_array).to_i}",
         "#{(get :fps).to_i} #{mouse_angle(mousex, mousey, player_center_array)[0]}",
         x: 20, y: 20,
         style: 'bold',
