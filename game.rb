@@ -37,9 +37,10 @@ on :key_up do |event|
     end     
 end
 
+
 on :mouse_down do |event|
     # x and y coordinates of the mouse button event
-    puts event.x, event.y
+    # puts event.x, event.y
   
     # Read the button event
     case event.button
@@ -48,10 +49,8 @@ on :mouse_down do |event|
         # 16 = ((@player.x + @player.width/2) - x)**2 + ((@player.y + @player.height/2) - y)**2 
         # 1;0
 
-                
-
-        @bullet.x = @player.x + @player.width/2 + Math.cos(mouse_angle(mouse_x, mouse_y, player_center_array)[1])
-        @bullet.y = @player.y + @player.height/2 + Math.sin(mouse_angle(mouse_x, mouse_y, player_center_array)[2])
+        @bullet.x = @player.x + @player.width/2 + Math.cos(mouse_angle(mousex, mousey, player_center_array)[0])
+        @bullet.y = @player.y + @player.height/2 + Math.sin(mouse_angle(mousex, mousey, player_center_array)[0])
         @bullet.rotate = @player.rotate
     when :middle
 
@@ -60,7 +59,7 @@ on :mouse_down do |event|
     end
 end
 
-
+i = 0
 update do
     mousex = get :mouse_x
     mousey = get :mouse_y
