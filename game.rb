@@ -6,7 +6,7 @@ require_relative "help_functions.rb"
 set width: 200
 set height: 120
 set resizable: true
-set viewport_width: 100
+# set viewport_width: 100
 
 on :key_held do |event|
     case event.key

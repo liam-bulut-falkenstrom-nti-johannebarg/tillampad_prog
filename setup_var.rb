@@ -16,9 +16,9 @@
 
 #Sprites
 @player = Sprite.new('sprites\player_sprite.png',
-    clip_width: 24,
-    width: 24,
-    height: 24,
+    clip_width: 16,
+    width: 16,
+    height: 16,
     x: 100,
     y: 100,
     loop: true,
