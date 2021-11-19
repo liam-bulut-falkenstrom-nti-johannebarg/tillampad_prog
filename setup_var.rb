@@ -16,9 +16,9 @@
 
 #Sprites
 @player = Sprite.new('sprites\player_sprite.png',
-    clip_width: 16,
-    width: 16,
-    height: 16,
+    clip_width: 24,
+    width: 24,
+    height: 24,
     x: 100,
     y: 100,
     loop: true,
@@ -43,6 +43,13 @@
     loop: true,
     time: 100
 )
+@bullet_hitbox = Sprite.new('sprites\hit_collision.png',
+width: 2,
+height: 1,
+x: 110,
+y: 100,
+)
+
 
 @bullet_2 = Sprite.new('sprites\bullet.png',
     width: 16,

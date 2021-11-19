@@ -42,6 +42,7 @@ on :key_up do |event|
     end     
 end
 
+
 on :mouse_down do |event|
     case event.button
     when :left
@@ -76,7 +77,7 @@ on :mouse_down do |event|
     end
 end
 
-
+i = 0
 update do
     mousex = get :mouse_x
     mousey = get :mouse_y
