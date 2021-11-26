@@ -3,10 +3,11 @@ require 'ruby2d'
 require_relative "setup_var.rb"
 require_relative "help_functions.rb"
 
+Ruby2D::Window.new
+
 set width: 200
 set height: 120
 set resizable: true
-# set viewport_width: 100
 
 on :key_held do |event|
     case event.key
@@ -55,13 +56,15 @@ on :mouse_down do |event|
                 player_center_array = [(@player.x + @player.width/2), (@player.y + @player.height/2)] # Kan komma att ändras i och med att mittpunkten/tyngdpunkten för sprites skiljer sig. 
                 rotate_angle = mouse_angle(mousex, mousey, player_center_array)[0]
                 unit_vector = mouse_angle(mousex, mousey, player_center_array)[1]
-                
                 @bullet_array[i][0].x = @player.x
                 @bullet_array[i][0].y = @player.y
                 @bullet_array[i][0].rotate = rotate_angle
                 @bullet_array[i][1] = true
                 @bullet_array[i][2] = unit_vector[0]
                 @bullet_array[i][3] = unit_vector[1]
+                @bullet_hitbox_array[i].x = @bullet_array[i][0].x
+                @bullet_hitbox_array[i].y = @bullet_array[i][0].y
+                @bullet_hitbox_array[i].rotate = @bullet_array[i][0].rotate
 
                 @ammo_mag -= 1 
 
@@ -76,7 +79,8 @@ on :mouse_down do |event|
 
     end
 end
-
+hitbox_update_shots = 0
+hitbox_update_entities = 0
 i = 0
 update do
     mousex = get :mouse_x
@@ -85,6 +89,7 @@ update do
     rotate_angle = mouse_angle(mousex, mousey, player_center_array)[0]
     unit_vector = mouse_angle(mousex, mousey, player_center_array)[1]
     @player.rotate = rotate_angle
+
 
     if (@right - @left).abs == (@down - @up).abs
         @x_dir = (@right - @left) * 0.70 # typ roten ur 2 dividerat på 2
@@ -115,6 +120,9 @@ update do
             @bullet_array[i][0].x += @bullet_array[i][2] * @bullet_speed
             @bullet_array[i][0].y += @bullet_array[i][3] * @bullet_speed
             @bullet_array[i][0].add
+            @bullet_hitbox_array[i].x = @bullet_array[i][0].x+8
+            @bullet_hitbox_array[i].y = @bullet_array[i][0].y+8
+            
         else
             @bullet_array[i][0].remove
         end
@@ -122,11 +130,24 @@ update do
     end
 
 
+    #Hit detection player_enemy
+    while hitbox_update_shots < @bullet_hitbox_array.length
+        while hitbox_update_entities < @enemy_array.length
+            if collision(@bullet_hitbox_array[hitbox_update_shots], @enemy_array[hitbox_update_entities][0])
+                @enemy_array[hitbox_update_entities][1] += 1
+            end
+            hitbox_update_entities += 1
+        end
+        hitbox_update_entities = 0
+        hitbox_update_shots += 1
+    end
+
+
     #Här är debugging kod
     @text.remove
     @text = Text.new(
     #    "#{(get :fps).to_i} #{mouse_angle(mousex, mousey, player_center_array).to_i}",
-        "#{(get :fps).to_i} #{mouse_angle(mousex, mousey, player_center_array)[0]} #{@ammo_mag}/#{@ammo_total}",
+        "#{(get :fps).to_i} #{(get :viewport_width)} #{mouse_angle(mousex, mousey, player_center_array)[0]} #{@ammo_mag}/#{@ammo_total} #{@enemy_array[0][1]}",
         x: 20, y: 20,
         style: 'bold',
         size: 8,

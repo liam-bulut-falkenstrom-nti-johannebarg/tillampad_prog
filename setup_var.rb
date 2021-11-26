@@ -43,7 +43,8 @@
     loop: true,
     time: 100
 )
-@bullet_hitbox = Sprite.new('sprites\hit_collision.png',
+
+@bullet_hitbox_1 = Sprite.new('sprites\hit_collision.png',
 width: 2,
 height: 1,
 x: 110,
@@ -60,6 +61,13 @@ y: 100,
     time: 100
 )
 
+@bullet_hitbox_2 = Sprite.new('sprites\hit_collision.png',
+width: 2,
+height: 1,
+x: 110,
+y: 100,
+)
+
 @bullet_3 = Sprite.new('sprites\bullet.png',
     width: 16,
     height: 16,
@@ -68,6 +76,14 @@ y: 100,
     loop: true,
     time: 100
 )
+
+@bullet_hitbox_3 = Sprite.new('sprites\hit_collision.png',
+width: 2,
+height: 1,
+x: 110,
+y: 100,
+)
+
 
 #Player variables
 @left = 0
@@ -80,16 +96,17 @@ y: 100,
 @walk_speed = 1.5
 
 #Enemy 1 variabled
+@enemy_array = [[@enemy_1, 0]]
 @enemy_1_hit = 0
 
 #Bullet variables
 @bullet_array = [[@bullet_1, false, 0, 0], [@bullet_2, false, 0, 0], [@bullet_3, false, 0, 0]]
-@bullet_speed = 5
+@bullet_speed = 1
 @ammo_mag = 30
 @ammo_total = 120
 @reload = 0
 @reload_time = 0
-
+@bullet_hitbox_array = [@bullet_hitbox_1, @bullet_hitbox_2, @bullet_hitbox_3]
 
 # Här kommer kod för att skriva ut info på skärmen (typ debugging)
 @text = Text.new(

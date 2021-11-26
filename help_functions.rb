@@ -12,9 +12,9 @@ def mouse_angle(mouse_x, mouse_y, player_center_array)
     end 
 end
 
-def collision(object_1_x, object_1_y, object_2_x, object_2_y)
-    if object_2_y + object_2_height > object_1_y && object_2_y < object_1_y + object_1_height
-        if  object_2_x + object_2_width > object_1_x && object_2_x < object_1_x + object_1_width            
+def collision(object_1, object_2)
+    if object_2.y + object_2.height > object_1.y && object_2.y < object_1.y + object_1.height
+        if  object_2.x + object_2.width > object_1.x && object_2.x < object_1.x + object_1.width            
             return true
         end
     end
