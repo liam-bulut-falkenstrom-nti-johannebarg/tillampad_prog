@@ -1,14 +1,17 @@
+#Map var
+@pixel_scaler = 5
+
 #Background
 @map = Image.new('sprites\map_main.png',
-    width: 500,
-    height: 600,
-    x: -80,
-    y: -120,
+    width: 500 * @pixel_scaler,
+    height: 600 * @pixel_scaler,
+    x: 0 * @pixel_scaler,
+    y: 0 * @pixel_scaler,
 )
 
-@box = Image.new('sprites\box.png',
-    width: 34,
-    height: 34,
+@box = Sprite.new('sprites\box.png',
+    width: 34 * @pixel_scaler,
+    height: 34 * @pixel_scaler,
     x: -150,
     y: -180,
 )
@@ -16,19 +19,19 @@
 
 #Sprites
 @player = Sprite.new('sprites\player_sprite.png',
-    clip_width: 16,
-    width: 16,
-    height: 16,
-    x: 100,
-    y: 100,
+    clip_width: 25,
+    width: 25 * @pixel_scaler,
+    height: 25 * @pixel_scaler,
+    x: Window.width/2,
+    y: Window.height/2,
     loop: true,
     time: 100,
 )
 
 @enemy_1 = Sprite.new('sprites\enemy_sprite.png',
-    clip_width: 20,
-    width: 20,
-    height: 20,
+    clip_width: 25,
+    width: 25 * @pixel_scaler,
+    height: 25 * @pixel_scaler,
     x: 100,
     y: 50,
     loop: true,
@@ -36,8 +39,26 @@
 )
 
 @bullet_1 = Sprite.new('sprites\bullet.png',
-    width: 16,
-    height: 16,
+    width: 2 * @pixel_scaler,
+    height: 1 * @pixel_scaler,
+    x: 110,
+    y: 100,
+    loop: true,
+    time: 100
+)
+
+@bullet_2 = Sprite.new('sprites\bullet.png',
+    width: 2 * @pixel_scaler,
+    height: 1 * @pixel_scaler,
+    x: 110,
+    y: 100,
+    loop: true,
+    time: 100
+)
+
+@bullet_3 = Sprite.new('sprites\bullet.png',
+    width: 2 * @pixel_scaler,
+    height: 1 * @pixel_scaler,
     x: 110,
     y: 100,
     loop: true,
@@ -45,44 +66,27 @@
 )
 
 @bullet_hitbox_1 = Sprite.new('sprites\hit_collision.png',
-width: 2,
-height: 1,
+width: 2 * @pixel_scaler,
+height: 1 * @pixel_scaler,
 x: 110,
 y: 100,
-)
-
-
-@bullet_2 = Sprite.new('sprites\bullet.png',
-    width: 16,
-    height: 16,
-    x: 110,
-    y: 100,
-    loop: true,
-    time: 100
 )
 
 @bullet_hitbox_2 = Sprite.new('sprites\hit_collision.png',
-width: 2,
-height: 1,
+width: 2 * @pixel_scaler,
+height: 1 * @pixel_scaler,
 x: 110,
 y: 100,
-)
-
-@bullet_3 = Sprite.new('sprites\bullet.png',
-    width: 16,
-    height: 16,
-    x: 110,
-    y: 100,
-    loop: true,
-    time: 100
 )
 
 @bullet_hitbox_3 = Sprite.new('sprites\hit_collision.png',
-width: 2,
-height: 1,
+width: 2 * @pixel_scaler,
+height: 1 * @pixel_scaler,
 x: 110,
 y: 100,
 )
+
+
 
 
 #Player variables
@@ -93,15 +97,16 @@ y: 100,
 @up = 0
 @down = 0
 @y_dir = 0
-@walk_speed = 1.5
+@walk_speed = 8
 
 #Enemy 1 variabled
 @enemy_array = [[@enemy_1, 0]]
 @enemy_1_hit = 0
 
+
 #Bullet variables
 @bullet_array = [[@bullet_1, false, 0, 0], [@bullet_2, false, 0, 0], [@bullet_3, false, 0, 0]]
-@bullet_speed = 1
+@bullet_speed = 10
 @ammo_mag = 30
 @ammo_total = 120
 @reload = 0
