@@ -20,3 +20,7 @@ def collision(object_1, object_2)
     end
     return false
 end
+
+def xy_translate(x, y, x_increment, y_increment, relative_plain)
+    relative_plain.width 
+end

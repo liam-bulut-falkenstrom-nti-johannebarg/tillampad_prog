@@ -100,8 +100,8 @@ update do
     
     # @player.x += @x_dir * @walk_speed
     # @player.y += @y_dir * @walk_speed
-    @map.x += @x_dir * @walk_speed
-    @map.y += @y_dir * @walk_speed
+    @map.x -= @x_dir * @walk_speed
+    @map.y -= @y_dir * @walk_speed
 
     
 
@@ -152,12 +152,27 @@ update do
         hitbox_update_shots += 1
     end
 
+    #Hit collison Enviorment
+    hitbox_update_characters = 0
+    hitbox_update_collision_boxes = 0
+    while hitbox_update_characters < @characters_array.length
+        while hitbox_update_collision_boxes < @hitbox_array.length
+            if collision(@characters_array[hitbox_update_characters], @hitbox_array[hitbox_update_collision_boxes])
+                @hit_collision_test = 1
+            end
+            hitbox_update_collision_boxes += 1
+        end
+        hitbox_update_collision_boxes = 0
+        hitbox_update_characters += 1
+    end
+
+
 
     #Här är debugging kod
     @text.remove
     @text = Text.new(
     #    "#{(get :fps).to_i} #{mouse_angle(mousex, mousey, player_center_array).to_i}",
-        "#{(get :fps).to_i} #{(get :viewport_width)} #{rotate_angle} #{@ammo_mag}/#{@ammo_total} #{@enemy_array[0][1]}",
+        "#{(get :fps).to_i} #{(get :viewport_width)} #{rotate_angle} #{@ammo_mag}/#{@ammo_total} #{@enemy_array[0][1]} #{@hit_collision_test}",
         x: 20, y: 20,
         style: 'bold',
         size: 40,
