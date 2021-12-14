@@ -21,6 +21,6 @@ def collision(object_1, object_2)
     return false
 end
 
-def xy_translate(x, y, x_increment, y_increment, relative_plain)
-    relative_plain.width 
+def xy_translate(object_x, object_y, x_increment, y_increment, relative_plain)
+     
 end

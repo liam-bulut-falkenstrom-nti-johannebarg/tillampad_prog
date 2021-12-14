@@ -118,6 +118,8 @@ y: 100,
 @reload = 0
 @reload_time = 0
 @bullet_hitbox_array = [@bullet_hitbox_1, @bullet_hitbox_2, @bullet_hitbox_3]
+@bullet_x = 0
+@bullet_y = 0
 
 #hit box varibles
 @hitbox_array = [@map_hitbox_test]
