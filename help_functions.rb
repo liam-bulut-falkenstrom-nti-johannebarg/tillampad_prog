@@ -21,6 +21,6 @@ def collision(object_1, object_2)
     return false
 end
 
-def xy_translate(object_x, object_y, x_increment, y_increment, relative_plain)
-     
+def xy_translate(object, object_x, object_y, relative_plain)
+    return [(relative_plain.x + object_x), (relative_plain.y + object_y)] 
 end
