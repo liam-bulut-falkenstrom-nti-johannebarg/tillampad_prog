@@ -35,6 +35,15 @@
     time: 100,
 )
 
+@player_hitbox = Sprite.new('sprites\hit_collision.png',
+    width: 25 * @pixel_scaler,
+    height: 25 * @pixel_scaler,
+    x: (200/2 - 12.5) * @pixel_scaler,
+    y: (120/2 - 12.5) * @pixel_scaler,
+    loop: true,
+    time: 100,
+)
+
 @enemy_1 = Sprite.new('sprites\enemy_sprite.png',
     clip_width: 25,
     width: 25 * @pixel_scaler,
@@ -104,6 +113,12 @@ y: 100,
 @down = 0
 @y_dir = 0
 @walk_speed = 8
+@hitbox_movement = 5
+@on_r = 0
+@on_l = 0
+@on_u = 0
+@on_d = 0
+@direction = -1
 
 #Enemy 1 variables
 @enemy_array = [[@enemy_1, 0]]
@@ -123,7 +138,7 @@ y: 100,
 
 #hit box varibles
 @hitbox_array = [@map_hitbox_test]
-@characters_array = [@player, @enemy_1]
+@characters_array = [@player_hitbox, @enemy_1]
 @hit_collision_test = 0
 
 # Här kommer kod för att skriva ut info på skärmen (typ debugging)

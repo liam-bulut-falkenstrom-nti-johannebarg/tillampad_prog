@@ -21,6 +21,32 @@ def collision(object_1, object_2)
     return false
 end
 
+def collision_dir(object_1, object_2, dir)
+
+    i = 0
+    while i <= 8
+        if dir == 0
+            object_1.x = object_1.x - 1 
+        elsif dir == 1
+            object_1.x = object_1.x + 1 
+        elsif dir == 2
+            object_1.y = object_1.y - 1 
+        elsif dir == 3
+            object_1.y = object_1.y + 1 
+        end
+            
+        if collision(object_1, object_2)
+            return 8-i
+        end
+
+        i -= 1
+    end
+end
+        
+
+
+
+
 def xy_translate(object_x, object_y, x_increment, y_increment, relative_plain)
      
 end

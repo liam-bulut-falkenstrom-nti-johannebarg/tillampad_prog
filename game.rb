@@ -134,6 +134,9 @@ update do
     end
 
 
+
+
+
     #Hit detection player_enemy
     hitbox_update_shots = 0
     hitbox_update_entities = 0
@@ -153,18 +156,76 @@ update do
     end
 
     #Hit collison Enviorment
+
+    if @right == 1 
+        if @on_r == 0
+            @player_hitbox.x = @player_hitbox.x + 5
+            @on_r = 1
+            @direction = 0
+        end
+    elsif @left == 1
+        if @on_l == 0
+            @player_hitbox.x = @player_hitbox.x - 5
+            @on_l = 1
+            @direction = 1
+        end
+    elsif @up == 1
+        if @on_u == 0
+            @player_hitbox.y = @player_hitbox.y - 5
+            @on_u = 1
+            @direction = 2
+        end
+    elsif @down == 1
+        if @on_d == 0
+            @player_hitbox.y = @player_hitbox.y + 5
+            @on_d = 1
+            @direction = 3
+        end
+    end
+
+    if @right == 0 && @on_r == 1
+        @player_hitbox.x = @player_hitbox.x - 5
+        @on_r = 0
+        @direction = -1
+    elsif @left == 0 && @on_l == 1
+        @player_hitbox.x = @player_hitbox.x + 5
+        @on_l = 0
+        @direction = -1
+    elsif @up == 0 && @on_u == 1
+        @player_hitbox.y = @player_hitbox.y + 5
+        @on_u = 0
+        @direction = -1
+    elsif @down == 0 && @on_d == 1
+        @player_hitbox.y = @player_hitbox.y - 5
+        @on_d = 0
+        @direction = -1
+    end
+
     hitbox_update_characters = 0
     hitbox_update_collision_boxes = 0
     while hitbox_update_characters < @characters_array.length
         while hitbox_update_collision_boxes < @hitbox_array.length
             if collision(@characters_array[hitbox_update_characters], @hitbox_array[hitbox_update_collision_boxes])
                 @hit_collision_test = 1
+                @movementcorrection = collision_dir(@characters_array[hitbox_update_characters], @hitbox_array[hitbox_update_collision_boxes], @direction)
+                if @direction == 0
+                    @characters_array[hitbox_update_characters].x = @characters_array[hitbox_update_characters].x + i 
+                elsif @direction == 1
+                    @characters_array[hitbox_update_characters].x = @characters_array[hitbox_update_characters].x - i 
+                elsif @direction == 2
+                    @characters_array[hitbox_update_characters].y = @characters_array[hitbox_update_characters].y + i 
+                elsif @direction == 3
+                    @characters_array[hitbox_update_characters].y = @characters_array[hitbox_update_characters].y - i 
+                end
+                # NOTE TO FRAMTIDA OLIVER, BEHÖVER FIXA SÅ ATT MAN KAN TESTA SAMT ATT MAN INTE SKALL KUNNA FORTSÄTTA ATT GÅ
             end
             hitbox_update_collision_boxes += 1
         end
         hitbox_update_collision_boxes = 0
         hitbox_update_characters += 1
     end
+
+
 
 
 
