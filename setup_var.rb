@@ -123,18 +123,24 @@ y: 100,
 #Enemy 1 variables
 @enemy_array = [[@enemy_1, 0]]
 @enemy_1_hit = 0
+@enemy_1_x = 0
+@enemy_1_y = 0
 
 
 #Bullet variables
-@bullet_array = [[@bullet_1, false, 0, 0], [@bullet_2, false, 0, 0], [@bullet_3, false, 0, 0]]
+@bullet_1_x = 0
+@bullet_1_y = 0
+@bullet_2_x = 0 
+@bullet_2_y = 0
+@bullet_3_x = 0 
+@bullet_3_y = 0
+@bullet_array = [[@bullet_1, false, 0, 0, @bullet_1_x, @bullet_1_y], [@bullet_2, false, 0, 0, @bullet_2_x, @bullet_2_y], [@bullet_3, false, 0, 0, @bullet_3_x, @bullet_3_y]]
 @bullet_speed = 10
 @ammo_mag = 30
 @ammo_total = 120
 @reload = 0
 @reload_time = 0
 @bullet_hitbox_array = [@bullet_hitbox_1, @bullet_hitbox_2, @bullet_hitbox_3]
-@bullet_x = 0
-@bullet_y = 0
 
 #hit box varibles
 @hitbox_array = [@map_hitbox_test]
