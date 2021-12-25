@@ -24,7 +24,7 @@ end
 def collision_dir(object_1, object_2, dir)
 
     i = 0
-    while i <= 8
+    while i <= 16
         if dir == 0
             object_1.x = object_1.x - 1 
         elsif dir == 1
@@ -39,7 +39,7 @@ def collision_dir(object_1, object_2, dir)
             return 8-i
         end
 
-        i -= 1
+        i += 1
     end
 end
      

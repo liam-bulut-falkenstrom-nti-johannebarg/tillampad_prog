@@ -19,7 +19,7 @@
 @map_hitbox_test = Sprite.new('sprites\hit_collision.png',
     width: 40 * @pixel_scaler,
     height: 40 * @pixel_scaler,
-    x: 70 * @pixel_scaler,
+    x: 100 * @pixel_scaler,
     y: 50 * @pixel_scaler
 
 )
@@ -144,8 +144,10 @@ y: 100,
 
 #hit box varibles
 @hitbox_array = [@map_hitbox_test]
-@characters_array = [@player_hitbox, @enemy_1]
+@characters_array = [@player_hitbox]
 @hit_collision_test = 0
+@map_hitbox_test_x = 50
+@map_hitbox_test_y = -50
 
 # Här kommer kod för att skriva ut info på skärmen (typ debugging)
 @text = Text.new(

@@ -10,11 +10,22 @@ set resizable: true
 on :key_held do |event|
     case event.key
         when 'd'
-            @x_dir = 1
-            @right = 1
+            if @on_r != 2
+                @x_dir = 1
+                @right = 1
+            end
+            if @on_l == 2
+                p "sätter på left"
+                @on_l = 0
+            end
         when 'a'
-            @x_dir = -1
-            @left = 1
+            if @on_l != 2
+                @x_dir = -1
+                @left = 1
+            end
+            if @on_r == 2
+                @on_r = 0
+            end
         when 'w'
             @y_dir = -1
             @up = 1
@@ -154,7 +165,13 @@ update do
     xy_array = xy_translate(@enemy_1, @enemy_1_x, @enemy_1_y, @map)
     @enemy_1.x = xy_array[0]
     @enemy_1.y = xy_array[1]
+
+    #Testar bara min hitbox grej så gjorde en relativ (kommenterar bort om du vill)
     
+    xz_array = xy_translate(@map_hitbox_test, @map_hitbox_test_x, @map_hitbox_test_y, @map)
+    @map_hitbox_test.x = xy_array[0]
+    @map_hitbox_test.y = xy_array[1]
+
     i = 0
     while i < @bullet_array.length
         xy_array = xy_translate(@bullet_array[i][0], @bullet_array[i][4], @bullet_array[i][5], @map)
@@ -168,44 +185,44 @@ update do
 
     if @right == 1 
         if @on_r == 0
-            @player_hitbox.x = @player_hitbox.x + 5
+            @player_hitbox.x = @player_hitbox.x + 8
             @on_r = 1
             @direction = 0
         end
     elsif @left == 1
         if @on_l == 0
-            @player_hitbox.x = @player_hitbox.x - 5
+            @player_hitbox.x = @player_hitbox.x - 8
             @on_l = 1
             @direction = 1
         end
     elsif @up == 1
         if @on_u == 0
-            @player_hitbox.y = @player_hitbox.y - 5
+            @player_hitbox.y = @player_hitbox.y - 8
             @on_u = 1
             @direction = 2
         end
     elsif @down == 1
         if @on_d == 0
-            @player_hitbox.y = @player_hitbox.y + 5
+            @player_hitbox.y = @player_hitbox.y + 8
             @on_d = 1
             @direction = 3
         end
     end
 
     if @right == 0 && @on_r == 1
-        @player_hitbox.x = @player_hitbox.x - 5
+        @player_hitbox.x = @player_hitbox.x - 8
         @on_r = 0
         @direction = -1
     elsif @left == 0 && @on_l == 1
-        @player_hitbox.x = @player_hitbox.x + 5
+        @player_hitbox.x = @player_hitbox.x + 8
         @on_l = 0
         @direction = -1
     elsif @up == 0 && @on_u == 1
-        @player_hitbox.y = @player_hitbox.y + 5
+        @player_hitbox.y = @player_hitbox.y + 8
         @on_u = 0
         @direction = -1
     elsif @down == 0 && @on_d == 1
-        @player_hitbox.y = @player_hitbox.y - 5
+        @player_hitbox.y = @player_hitbox.y - 8
         @on_d = 0
         @direction = -1
     end
@@ -214,17 +231,19 @@ update do
     hitbox_update_collision_boxes = 0
     while hitbox_update_characters < @characters_array.length
         while hitbox_update_collision_boxes < @hitbox_array.length
-            if collision(@characters_array[hitbox_update_characters], @hitbox_array[hitbox_update_collision_boxes])
+            if collision(@characters_array[hitbox_update_characters], @hitbox_array[hitbox_update_collision_boxes]) == true
                 @hit_collision_test = 1
                 @movementcorrection = collision_dir(@characters_array[hitbox_update_characters], @hitbox_array[hitbox_update_collision_boxes], @direction)
                 if @direction == 0
-                    @characters_array[hitbox_update_characters].x = @characters_array[hitbox_update_characters].x + i 
+                    @map.x = @map.x + i 
+                    @on_r = 2
                 elsif @direction == 1
-                    @characters_array[hitbox_update_characters].x = @characters_array[hitbox_update_characters].x - i 
+                    @map.x = @map.x - i 
+                    @on_l = 2
                 elsif @direction == 2
-                    @characters_array[hitbox_update_characters].y = @characters_array[hitbox_update_characters].y + i 
+                    @map.y = @map.y - i 
                 elsif @direction == 3
-                    @characters_array[hitbox_update_characters].y = @characters_array[hitbox_update_characters].y - i 
+                    @map.y = @map.y + i 
                 end
                 # NOTE TO FRAMTIDA OLIVER, BEHÖVER FIXA SÅ ATT MAN KAN TESTA SAMT ATT MAN INTE SKALL KUNNA FORTSÄTTA ATT GÅ
             end
@@ -234,7 +253,7 @@ update do
         hitbox_update_characters += 1
     end
 
-    
+
 
 
 
