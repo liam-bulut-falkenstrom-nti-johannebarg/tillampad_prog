@@ -3,8 +3,8 @@ require 'ruby2d'
 require_relative "setup_var.rb"
 require_relative "help_functions.rb"
 
-set width: 200 * @pixel_scaler
-set height: 120 * @pixel_scaler
+set width: 300 * @pixel_scaler
+set height: 180 * @pixel_scaler
 set resizable: true
 
 on :key_held do |event|
@@ -57,30 +57,7 @@ on :mouse_down do |event|
     case event.button
     when :left
     if @ammo_mag > 0
-        i = 0
-        while i < @bullet_array.length  
-            if @bullet_array[i][1] == false
-                mousex = get :mouse_x
-                mousey = get :mouse_y
-                player_center_array = [(@player.x + @player.width/2), (@player.y + @player.height/2)] # Kan komma att ändras i och med att mittpunkten/tyngdpunkten för sprites skiljer sig. 
-                rotate_angle = mouse_angle(mousex, mousey, player_center_array)[0]
-                unit_vector = mouse_angle(mousex, mousey, player_center_array)[1]
-                @bullet_array[i][4] = @player.x + @player.width/2 - @bullet_array[i][0].width/2
-                @bullet_array[i][5] = @player.y + @player.height/2 - @bullet_array[i][0].height/2
-                @bullet_array[i][0].rotate = rotate_angle
-                @bullet_array[i][1] = true
-                @bullet_array[i][2] = unit_vector[0]
-                @bullet_array[i][3] = unit_vector[1]
-                # @bullet_hitbox_array[i].x = @bullet_array[i][0].x
-                # @bullet_hitbox_array[i].y = @bullet_array[i][0].y
-                @bullet_hitbox_array[i].rotate = @bullet_array[i][0].rotate
-
-                @ammo_mag -= 1 
-
-                i = @bullet_array.length
-            end
-            i += 1
-        end
+        @shooting = true
     end
     when :middle
 
@@ -93,24 +70,42 @@ i = 0
 update do
     mousex = get :mouse_x
     mousey = get :mouse_y
-    player_center_array = [(@player.x + @player.width/2), (@player.y + @player.height/2)] # Kan komma att ändras i och med att mittpunkten/tyngdpunkten för sprites skiljer sig. 
+    player_center_array = [(@player.x + @player.width/2), (@player.y + @player.height/2)] # Kan komma att ändras i och med att mittpunkten för sprites skiljer sig. 
     rotate_angle = mouse_angle(mousex, mousey, player_center_array)[0]
     unit_vector = mouse_angle(mousex, mousey, player_center_array)[1]
-    @player.rotate = rotate_angle
-
 
     if (@right - @left).abs == (@down - @up).abs
-        @x_dir = (@right - @left) * 0.70 # typ roten ur 2 dividerat på 2
+        @x_dir = (@right - @left) * 0.70 # typ roten ur 2 dividerat på 2 (cirkelns ekvation)
         @y_dir = (@down - @up) * 0.70 
     else
         @x_dir = (@right - @left) 
         @y_dir = (@down - @up)
     end 
     
-    @map.x -= @x_dir * @walk_speed
-    @map.y -= @y_dir * @walk_speed
+    if @shooting
+        i = 0
+        while i < @bullet_array.length  
+            if @bullet_array[i][1] == false
+                
+                @bullet_array[i][0].rotate = rotate_angle
+                @bullet_array[i][1] = true
+                @bullet_array[i][2] = unit_vector[0]
+                @bullet_array[i][3] = unit_vector[1]
+                @bullet_array[i][4] = (@player.x - @map.x  + @player.width/2).abs
+                @bullet_array[i][5] = (@player.y - @map.y + @player.height/2).abs
+                @ammo_mag -= 1
+                i = @bullet_array.length
+                @player.play animations: :shoot
 
-    
+                # @bullet_hitbox_array[i].x = @bullet_array[i][0].x
+                # @bullet_hitbox_array[i].y = @bullet_array[i][0].y
+                # @bullet_hitbox_array[i].rotate = @bullet_array[i][0].rotate
+
+            end
+            i += 1
+        end
+        @shooting = false
+    end
 
     if @reload == 1
         @reload_time += 1
@@ -121,26 +116,6 @@ update do
             @reload_time = 0
         end
     end
-
-    i = 0
-    while i < @bullet_array.length
-        if @bullet_array[i][0].x > Window.width || @bullet_array[i][0].x < 0 || @bullet_array[i][0].y > Window.height || @bullet_array[i][0].y < 0
-            @bullet_array[i][1] = false
-        end
-        if @bullet_array[i][1] == true
-            @bullet_array[i][4] += @bullet_array[i][2] * @bullet_speed
-            @bullet_array[i][5] +=  @bullet_array[i][3] * @bullet_speed
-            @bullet_array[i][0].add
-            # @bullet_hitbox_array[i].x = @bullet_array[i][0].x
-            # @bullet_hitbox_array[i].y = @bullet_array[i][0].y
-            
-        else
-            @bullet_array[i][0].remove
-        end
-        i += 1
-    end
-
-
 
 
 
@@ -162,24 +137,15 @@ update do
         hitbox_update_shots += 1
     end
 
-    xy_array = xy_translate(@enemy_1, @enemy_1_x, @enemy_1_y, @map)
+    xy_array = xy_translate(@enemy_1_x, @enemy_1_y, @map)
     @enemy_1.x = xy_array[0]
     @enemy_1.y = xy_array[1]
 
     #Testar bara min hitbox grej så gjorde en relativ (kommenterar bort om du vill)
     
-    xz_array = xy_translate(@map_hitbox_test, @map_hitbox_test_x, @map_hitbox_test_y, @map)
+    xz_array = xy_translate(@map_hitbox_test_x, @map_hitbox_test_y, @map)
     @map_hitbox_test.x = xy_array[0]
     @map_hitbox_test.y = xy_array[1]
-
-    i = 0
-    while i < @bullet_array.length
-        xy_array = xy_translate(@bullet_array[i][0], @bullet_array[i][4], @bullet_array[i][5], @map)
-        @bullet_array[i][0].x = xy_array[0]
-        @bullet_array[i][0].y = xy_array[1]
-        i += 1
-    end
-
 
     #Hit collison Enviorment
 
@@ -255,12 +221,54 @@ update do
 
 
 
+    @player.rotate = rotate_angle
+    @map.x -= @x_dir * @walk_speed
+    @map.y -= @y_dir * @walk_speed
 
+    i = 0
+    while i < @bullet_array.length
+        @bullet_array[i][4] += @bullet_array[i][2] * @bullet_speed
+        @bullet_array[i][5] += @bullet_array[i][3] * @bullet_speed
+        xy_array = xy_translate(@bullet_array[i][4], @bullet_array[i][5], @map)
+        @bullet_array[i][0].x = xy_array[0]
+        @bullet_array[i][0].y = xy_array[1]
+        @bullet_array[i][0].add
+        if @bullet_array[i][0].x > Window.width || @bullet_array[i][0].x < 0 || @bullet_array[i][0].y > Window.height || @bullet_array[i][0].y < 0
+            if @bullet_array[i][1] == true && @health_index < 11 #SKULLE BARA TESTA IFALL KODEN FUNKAR, TAR BORT DETTA SEN
+                @health_index += 1
+            end
+            @bullet_array[i][1] = false
+            @bullet_array[i][0].remove
+        end
+        i += 1
+    end
 
-    #Här är debugging kod
+    i = 0
+    while i < @wall_array.length
+        xy_array = xy_translate(@wall_array[i][1], @wall_array[i][2], @map)
+        @wall_array[i][0].x = xy_array[0]
+        @wall_array[i][0].y = xy_array[1]
+        i += 1
+    end
+
+    @submap.x = @map.x
+    @submap.y = @map.y
+
+    if collision(@submap_col, @player) == true
+        if @submap.opacity > 0
+            @submap.opacity -= 0.1
+        end
+    else
+        if @submap.opacity < 1
+            @submap.opacity += 0.1
+        end
+    end
+   
+    @health_bar.play animation: :"#{@health_bar_array[@health_index]}"
+
+    #Här är debugging kod -----------------------------------------------------------------------------------------------------------------------
     @text.remove
     @text = Text.new(
-    #    "#{(get :fps).to_i} #{mouse_angle(mousex, mousey, player_center_array).to_i}",
         "#{(get :fps).to_i} #{rotate_angle.to_i} #{@ammo_mag}/#{@ammo_total} #{@enemy_array[0][1]} #{@hit_collision_test}",
         x: 20, y: 20,
         style: 'bold',
