@@ -25,7 +25,7 @@
 )
 
 #Sprites
-@player = Sprite.new('sprites\player_sprite.png',
+@player = Sprite.new('sprites\player_sprite_proto.png',
     clip_width: 25,
     width: 25 * @pixel_scaler,
     height: 25 * @pixel_scaler,
