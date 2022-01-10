@@ -209,7 +209,8 @@ y: 100,
     width: 500 * @pixel_scaler,
     height: 600 * @pixel_scaler,
     x: 0 * @pixel_scaler,
-    y: 0 * @pixel_scaler
+    y: 0 * @pixel_scaler,
+    opacity: 0,
 )
 
 #static collision 
@@ -238,11 +239,13 @@ y: 100,
 @y_dir = 0
 @walk_speed = 8
 @hitbox_movement = 5
+@hitbox_update = 0
 @on_r = 0
 @on_l = 0
 @on_u = 0
 @on_d = 0
-@direction = -1
+@correction_x = 0
+@correction_y = 0
 
 #Enemy 1 variables
 @enemy_array = [[@enemy_1, 0]]
