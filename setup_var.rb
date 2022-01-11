@@ -9,13 +9,6 @@
     y: 0 * @pixel_scaler
 )
 
-@box = Sprite.new('sprites\box.png',
-    width: 34 * @pixel_scaler,
-    height: 34 * @pixel_scaler,
-    x: -150,
-    y: -180,
-)
-
 @wall_col1 = Sprite.new('sprites\hit_collision.png',
     width: 191 * @pixel_scaler,
     height: 158 * @pixel_scaler,
@@ -112,13 +105,6 @@
     opacity: 0
 )
 
-@map_hitbox_test = Sprite.new('sprites\hit_collision.png',
-    width: 40 * @pixel_scaler,
-    height: 40 * @pixel_scaler,
-    x: 100 * @pixel_scaler,
-    y: 50 * @pixel_scaler
-)
-
 #Sprites
 @player = Sprite.new('sprites\player_sprite.png',
     clip_width: 25,
@@ -147,16 +133,6 @@
     opacity: 0.4
 )
 
-@enemy_1 = Sprite.new('sprites\enemy_sprite.png',
-    clip_width: 25,
-    width: 25 * @pixel_scaler,
-    height: 25 * @pixel_scaler,
-    x: 100,
-    y: 50,
-    loop: true,
-    time: 100,
-)
-
 @bullet_1 = Sprite.new('sprites\bullet.png',
     width: 2 * (@pixel_scaler-1),
     height: 1 * (@pixel_scaler-1),
@@ -165,6 +141,7 @@
     loop: true,
     time: 100
 )
+
 
 @bullet_2 = Sprite.new('sprites\bullet.png',
     width: 2 * (@pixel_scaler-1),
@@ -184,26 +161,36 @@
     time: 100
 )
 
-@bullet_hitbox_1 = Sprite.new('sprites\hit_collision.png',
-width: 2 * @pixel_scaler,
-height: 1 * @pixel_scaler,
-x: 110,
-y: 100,
-)
+# @bullet_hitbox_1 = Sprite.new('sprites\hit_collision.png',
+# width: 2 * @pixel_scaler,
+# height: 1 * @pixel_scaler,
+# x: 110,
+# y: 100,
+# )
 
-@bullet_hitbox_2 = Sprite.new('sprites\hit_collision.png',
-width: 2 * @pixel_scaler,
-height: 1 * @pixel_scaler,
-x: 110,
-y: 100,
-)
+# @bullet_hitbox_2 = Sprite.new('sprites\hit_collision.png',
+# width: 2 * @pixel_scaler,
+# height: 1 * @pixel_scaler,
+# x: 110,
+# y: 100,
+# )
 
-@bullet_hitbox_3 = Sprite.new('sprites\hit_collision.png',
-width: 2 * @pixel_scaler,
-height: 1 * @pixel_scaler,
-x: 110,
-y: 100,
-)
+# @bullet_hitbox_3 = Sprite.new('sprites\hit_collision.png',
+# width: 2 * @pixel_scaler,
+# height: 1 * @pixel_scaler,
+# x: 110,
+# y: 100,
+# )
+
+
+#Från vänster til höger:sprite, walk dist, vilken rail, relativ x, relativ y, går fram eller tillbak, shoot tick,
+@enemyarray = [
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 1, 0, 0, 1, 80],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 2, 0, 0, 1, 80],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 3, 0, 0, 1, 80],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 4, 0, 0, 1, 80],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 5, 0, 0, 1, 80],
+]
 
 @submap = Sprite.new('sprites\map_sub.png',
     width: 500 * @pixel_scaler,
@@ -247,13 +234,6 @@ y: 100,
 @correction_x = 0
 @correction_y = 0
 
-#Enemy 1 variables
-@enemy_array = [[@enemy_1, 0]]
-@enemy_1_hit = 0
-@enemy_1_x = 0
-@enemy_1_y = 0
-
-
 #Bullet variables
 @shooting = false
 @bullet_1_x = 0
@@ -269,6 +249,8 @@ y: 100,
 @reload = 0
 @reload_time = 0
 @bullet_hitbox_array = [@bullet_hitbox_1, @bullet_hitbox_2, @bullet_hitbox_3]
+
+@enemy_bullet_array = []
 
 #hit box varibles
 @hitbox_array = [@map_hitbox_test]
@@ -314,277 +296,3 @@ y: 100,
 @health_bar_array = ["ten", "nine", "eight", "seven", "six", "five", "four", "three", "two", "one", "zero"]
 @health_index = 0
 
-
-# @hbar_d = Sprite.new('sprites\health_bar_dead.png'
-
-# )
-
-# @hbar_d_1 = Sprite.new('sprites\health_bar_dead.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 12 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_d_2 = Sprite.new('sprites\health_bar_dead.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 15 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_d_3 = Sprite.new('sprites\health_bar_dead.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 18 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_d_4 = Sprite.new('sprites\health_bar_dead.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 21 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_d_5 = Sprite.new('sprites\health_bar_dead.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 24 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_d_6 = Sprite.new('sprites\health_bar_dead.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 27 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_d_7 = Sprite.new('sprites\health_bar_dead.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 30 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_d_8 = Sprite.new('sprites\health_bar_dead.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 33 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_d_9 = Sprite.new('sprites\health_bar_dead.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 36 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_d_10 = Sprite.new('sprites\health_bar_dead.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 39 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_h_1 = Sprite.new('sprites\health_bar_half.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 12 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_h_2 = Sprite.new('sprites\health_bar_half.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 15 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_h_3 = Sprite.new('sprites\health_bar_half.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 18 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_h_4 = Sprite.new('sprites\health_bar_half.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 21 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_h_5 = Sprite.new('sprites\health_bar_half.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 24 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_h_6 = Sprite.new('sprites\health_bar_half.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 27 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_h_7 = Sprite.new('sprites\health_bar_half.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 30 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_h_8 = Sprite.new('sprites\health_bar_half.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 33 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_h_9 = Sprite.new('sprites\health_bar_half.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 36 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_h_10 = Sprite.new('sprites\health_bar_half.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 39 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_f_1 = Sprite.new('sprites\health_bar_full.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 12 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_f_2 = Sprite.new('sprites\health_bar_full.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 15 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_f_3 = Sprite.new('sprites\health_bar_full.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 18 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_f_4 = Sprite.new('sprites\health_bar_full.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 21 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_f_5 = Sprite.new('sprites\health_bar_full.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 24 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_f_6 = Sprite.new('sprites\health_bar_full.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 27 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_f_7 = Sprite.new('sprites\health_bar_full.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 30 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_f_8 = Sprite.new('sprites\health_bar_full.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 33 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_f_9 = Sprite.new('sprites\health_bar_full.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 36 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
-
-# @hbar_f_10 = Sprite.new('sprites\health_bar_full.png',
-#     width: 4 * @pixel_scaler,
-#     height: 8 * @pixel_scaler,
-#     x: 39 * @pixel_scaler,
-#     y: 110 * @pixel_scaler,
-#     loop: true,
-#     time: 100,
-# )
