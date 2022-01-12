@@ -21,10 +21,6 @@ on :key_held do |event|
             if @ammo_total >= 30
                 @reload = 1
             end
-        when 'q'
-            @player_hitbox.x = @player_hitbox.x - 1
-        when 'e'
-            @player_hitbox.x = @player_hitbox.x + 1
     end     
 end
 
@@ -107,32 +103,6 @@ update do
         end
     end
 
-
-
-    #Hit detection player_enemy
-    # hitbox_update_shots = 0
-    # hitbox_update_entities = 0
-    # while hitbox_update_shots < @bullet_hitbox_array.length
-    #     while hitbox_update_entities < @enemy_array.length
-    #         if collision(@bullet_hitbox_array[hitbox_update_shots], @enemy_array[hitbox_update_entities][0])
-    #             @enemy_array[hitbox_update_entities][1] += 1
-    #             # @bullet_array[hitbox_update_shots][4] = -1000
-    #             # @bullet_array[hitbox_update_shots][5] = -1000
-    #             # @bullet_hitbox_array[hitbox_update_shots].x = @bullet_array[hitbox_update_shots][0].x
-    #             # @bullet_hitbox_array[hitbox_update_shots].y = @bullet_array[hitbox_update_shots][0].y
-    #         end
-    #         hitbox_update_entities += 1
-    #     end
-    #     hitbox_update_entities = 0
-    #     hitbox_update_shots += 1
-    # end
-
-    #Testar bara min hitbox grej så gjorde en relativ (kommenterar bort om du vill)
-    
-    # xz_array = xy_translate(@map_hitbox_test_x, @map_hitbox_test_y, @map)
-    # @map_hitbox_test.x = xy_array[0]
-    # @map_hitbox_test.y = xy_array[1]
-
     #Hit collison Enviorment
 
     if @right == 1 
@@ -180,30 +150,36 @@ update do
     while hitbox_update_characters < @characters_array.length
         while hitbox_update_collision_boxes < @wall_array.length - 1
             if collision(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0]) == true
-                p @correction_x = collision_dir_x(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @x_dir, @y_dir)
-                p @correction_y = collision_dir_y(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @y_dir, @x_dir)
-                if @correction_x != false
-                    p "Inne i x" 
+                @correction_x = collision_dir_x(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @x_dir, @y_dir)
+                @correction_y = collision_dir_y(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @y_dir, @x_dir)
+                if @correction_x != 0 
                     if @x_dir > 0
                         @player_hitbox.x = @player.x
                         @map.x = @map.x - (8 - @correction_x)
                         @x_dir = 0 
+                        @y_dir = @y_dir * 1.428
+                        j = 0
                     elsif @x_dir < 0
                         @player_hitbox.x = @player.x
                         @map.x = @map.x + (8 - @correction_x)
                         @x_dir = 0
+                        @y_dir = @y_dir * 1.428
+                        j = 0
                     end
                 end
-                if @correction_y != false #Reminder testa att byta mot noll
-                    p "Inne i y"
+                if @correction_y != 0
                     if @y_dir > 0
                         @player_hitbox.y = @player.y
                         @map.y = @map.y - (8 - @correction_y) 
                         @y_dir = 0
+                        @x_dir = @x_dir * 1.428
+                        j = 0
                     elsif @y_dir < 0
                         @player_hitbox.y = @player.y
                         @map.y = @map.y + (8 - @correction_y) 
                         @y_dir = 0
+                        @x_dir = @x_dir * 1.428
+                        j = 0
                     end
                 end
             end
@@ -225,8 +201,10 @@ update do
     j += 1
     while j > 120 
         if @x_dir == 0 && @y_dir == 0 && @right == 0 && @left == 0 && @up == 0 && @down == 0
+
             @player_hitbox.x = @player.x
             @player_hitbox.y = @player.y
+
         end
         j = 0
     end
@@ -524,7 +502,7 @@ update do
                     end
                 end
             end
-            p @enemyarray[i][0].rotate #SPINNAR FÖR ATT DE ALDRIG BLIR NEGATIVA VINKELVÄRDEN, ÄNDRA SÅ ATT DET KAN VARA BÅDE POSITIVT OCH NEGATIVT VÄRDE PÅ VINKELN
+            # p @enemyarray[i][0].rotate #SPINNAR FÖR ATT DE ALDRIG BLIR NEGATIVA VINKELVÄRDEN, ÄNDRA SÅ ATT DET KAN VARA BÅDE POSITIVT OCH NEGATIVT VÄRDE PÅ VINKELN
         elsif @enemyarray[i][2] == 5
             if @enemyarray[i][1] == 0
                 @enemyarray[i][3] = 360 * @pixel_scaler
@@ -622,15 +600,15 @@ update do
     @submap.y = @map.y
 
 
-    if collision(@submap_col, @player) == true
-        if @submap.opacity > 0
-            @submap.opacity -= 0.1
-        end
-    else
-        if @submap.opacity < 1
-            @submap.opacity += 0.1
-        end
-    end
+    # if collision(@submap_col, @player) == true
+    #     if @submap.opacity > 0
+    #         @submap.opacity -= 0.1
+    #     end
+    # else
+    #     if @submap.opacity < 1
+    #         @submap.opacity += 0.1
+    #     end
+    # end
    
     @health_bar.play animation: :"#{@health_bar_array[@health_index]}"
 

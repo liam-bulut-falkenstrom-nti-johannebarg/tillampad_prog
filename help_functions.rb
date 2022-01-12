@@ -14,38 +14,11 @@ end
 
 def collision(object_1, object_2)
     if object_2.y + object_2.height > object_1.y && object_2.y < object_1.y + object_1.height
-        if  object_2.x + object_2.width > object_1.x && object_2.x < object_1.x + object_1.width       
-            # p "Kollision True"     
+        if  object_2.x + object_2.width > object_1.x && object_2.x < object_1.x + object_1.width        
             return true
         end
     end
-    # p "Kollision False"
     return false
-end
-
-def collision_dir(object_1, object_2, dir)
-
-    i = 0
-    while i <= 20
-        p "Direction: #{dir}"
-        if dir == 0
-            object_1.x = object_1.x - 1 
-            p "kollision höger"
-        elsif dir == 1
-            p "kollision vänster"
-            object_1.x = object_1.x + 1 
-        elsif dir == 2
-            object_1.y = object_1.y - 1 
-        elsif dir == 3
-            object_1.y = object_1.y + 1 
-        end
-            
-        if collision(object_1, object_2) == false
-            return i
-        end 
-        i += 1
-    end
-    return 21
 end
 
 def collision_dir_x(object_1, object_2, dir_x, dir_y)
@@ -54,40 +27,29 @@ def collision_dir_x(object_1, object_2, dir_x, dir_y)
     if dir_y < 0
         object_1_y = object_1.y
         object_1_y = object_1_y + 8
-        p object_1_y
-        # p "kollision höger"
     elsif dir_y > 0
-        # p "kollision vänster"
         object_1_y = object_1.y
         object_1_y = object_1_y - 8
-        p object_1_y
     elsif dir_y == 0
-        # p "kollision vänster"
         object_1_y = object_1.y 
-        p object_1_y
     end
     while i >= 0
-        if collision_edit(object_1, object_2, object_1.x, object_1_y) == false
+        if collision_player(object_1, object_2, object_1.x, object_1_y) == false
             return 8-i
         end 
-        p "Direction x: #{dir_x}"
         if dir_x > 0
             object_1.x = object_1.x - 1 
-            # p "kollision höger"
         elsif dir_x < 0
-            # p "kollision vänster"
             object_1.x = object_1.x + 1 
         end
         i -= 1
     end
     if dir_x > 0
         object_1.x = object_1.x + 9 
-        # p "kollision höger"
     elsif dir_x < 0
-        # p "kollision vänster"
         object_1.x = object_1.x - 9 
     end
-    return false
+    return 0
 end
 
 def collision_dir_y(object_1, object_2, dir_y, dir_x)
@@ -96,50 +58,37 @@ def collision_dir_y(object_1, object_2, dir_y, dir_x)
     if dir_x < 0
         object_1_x = object_1.x
         object_1_x = object_1_x + 8
-        p object_1_x
-        # p "kollision höger"
     elsif dir_x > 0
-        # p "kollision vänster"
         object_1_x = object_1.x 
         object_1_x = object_1_x - 8
-        p object_1_x
     elsif dir_x == 0
-        # p "kollision vänster"
         object_1_x = object_1.x 
-        p object_1_x
     end
     while i >= 0
-        if collision_edit(object_1, object_2, object_1_x, object_1.y) == false
+        if collision_player(object_1, object_2, object_1_x, object_1.y) == false
             return 8-i
         end 
-        p "Direction y: #{dir_y}"
         if dir_y > 0
             object_1.y = object_1.y - 1 
-            # p "kollision ner"
         elsif dir_y < 0
-            # p "kollision upp"
             object_1.y = object_1.y + 1 
         end
         i -= 1
     end
     if dir_y > 0
         object_1.y = object_1.y + 9 
-        # p "kollision ner"
     elsif dir_y < 0
-        # p "kollision upp"
         object_1.y = object_1.y - 9 
     end
-    return false
+    return 0
 end
 
-def collision_edit(object_1, object_2, object_1_x, object_1_y)
+def collision_player(object_1, object_2, object_1_x, object_1_y)
     if object_2.y + object_2.height > object_1_y && object_2.y < object_1_y + object_1.height
-        if  object_2.x + object_2.width > object_1_x && object_2.x < object_1_x + object_1.width       
-            # p "Kollision True"     
+        if  object_2.x + object_2.width > object_1_x && object_2.x < object_1_x + object_1.width           
             return true
         end
     end
-    # p "Kollision False"
     return false
 end
      

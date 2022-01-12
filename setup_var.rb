@@ -240,6 +240,7 @@
 @on_d = 0
 @correction_x = 0
 @correction_y = 0
+@sw_player = 0
 
 #Bullet variables
 @shooting = false
