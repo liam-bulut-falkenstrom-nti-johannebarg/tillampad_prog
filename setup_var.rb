@@ -115,8 +115,8 @@
 @map_hitbox_test = Sprite.new('sprites\hit_collision.png',
     width: 40 * @pixel_scaler,
     height: 40 * @pixel_scaler,
-    x: 100 * @pixel_scaler,
-    y: 50 * @pixel_scaler
+    x: 1000 * @pixel_scaler,
+    y: 5000 * @pixel_scaler
 )
 
 #Sprites

@@ -11,33 +11,20 @@ on :key_held do |event|
     case event.key
         when 'd'
             @right = 1
-            if @on_l == 2
-                p "sätter på left"
-                @on_l = 0 
-            end
         when 'a'
             @left = 1
-            if @on_r == 2
-                @on_r = 0
-            end
         when 'w'
             @up = 1
-            if @on_d == 2
-                @on_d = 0
-            end
         when 's'
             @down = 1
-            if @on_u == 2
-                @on_u = 0
-            end
         when 'r'
             if @ammo_total >= 30
                 @reload = 1
             end
-        # when 'q'
-        #     @player_hitbox.x = @player_hitbox.x - 8
-        # when 'e'
-        #     @player_hitbox.x = @player_hitbox.x + 8
+        when 'q'
+            @player_hitbox.x = @player_hitbox.x - 1
+        when 'e'
+            @player_hitbox.x = @player_hitbox.x + 1
     end     
 end
 
@@ -69,6 +56,7 @@ on :mouse_down do |event|
 end
 
 i = 0
+j = 0
 update do
     mousex = get :mouse_x
     mousey = get :mouse_y
@@ -145,9 +133,9 @@ update do
 
     #Testar bara min hitbox grej så gjorde en relativ (kommenterar bort om du vill)
     
-    xz_array = xy_translate(@map_hitbox_test_x, @map_hitbox_test_y, @map)
-    @map_hitbox_test.x = xy_array[0]
-    @map_hitbox_test.y = xy_array[1]
+    # xz_array = xy_translate(@map_hitbox_test_x, @map_hitbox_test_y, @map)
+    # @map_hitbox_test.x = xy_array[0]
+    # @map_hitbox_test.y = xy_array[1]
 
     #Hit collison Enviorment
 
@@ -161,7 +149,9 @@ update do
             @player_hitbox.x = @player_hitbox.x - 8
             @on_l = 1
         end
-    elsif @up == 1
+    end
+    
+    if @up == 1
         if @on_u == 0
             @player_hitbox.y = @player_hitbox.y - 8
             @on_u = 1
@@ -179,7 +169,9 @@ update do
     elsif @left == 0 && @on_l == 1
         @player_hitbox.x = @player_hitbox.x + 8
         @on_l = 0
-    elsif @up == 0 && @on_u == 1
+    end
+    
+    if @up == 0 && @on_u == 1
         @player_hitbox.y = @player_hitbox.y + 8
         @on_u = 0
     elsif @down == 0 && @on_d == 1
@@ -187,67 +179,35 @@ update do
         @on_d = 0
     end
 
-    # hitbox_update_characters = 0
-    # hitbox_update_collision_boxes = 0
-    # while hitbox_update_characters < @characters_array.length
-    #     while hitbox_update_collision_boxes < @hitbox_array.length
-    #         if collision(@characters_array[hitbox_update_characters], @hitbox_array[hitbox_update_collision_boxes]) == true
-    #             @correction_x = collision_dir_x(@characters_array[hitbox_update_characters], @hitbox_array[hitbox_update_collision_boxes], @x_dir)
-    #             if @correction_x != false
-    #                 if @x_dir > 0
-    #                     @map.x = @map.x + @correction_x 
-    #                     @on_r = 2
-    #                 elsif @x_dir < 0
-    #                     @map.x = @map.x - @correction_x 
-    #                     @on_l = 2
-    #                 end
-    #             end
-    #             @correction_y = collision_dir_y(@characters_array[hitbox_update_characters], @hitbox_array[hitbox_update_collision_boxes], @y_dir)
-    #             if @correction_y != false
-    #                 if @y_dir > 0
-    #                     @map.y = @map.y - @correction_y 
-    #                     @on_d = 2
-    #                 elsif @y_dir < 0
-    #                     @map.y = @map.y + @correction_y 
-    #                     @on_u = 2
-    #                 end
-    #             end
-    #         end
-    #         hitbox_update_collision_boxes += 1
-    #     end
-    #     hitbox_update_collision_boxes = 0
-    #     hitbox_update_characters += 1
-    # end
-
     hitbox_update_characters = 0
     hitbox_update_collision_boxes = 0
     while hitbox_update_characters < @characters_array.length
         while hitbox_update_collision_boxes < @wall_array.length
             if collision(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0]) == true
-                p @correction_x = collision_dir_x(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @x_dir)
+                p @correction_x = collision_dir_x(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @x_dir, @y_dir)
+                p @correction_y = collision_dir_y(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @y_dir, @x_dir)
                 if @correction_x != false
-                    p "Inne i x"
+                    p "Inne i x" 
                     if @x_dir > 0
                         @player_hitbox.x = @player.x
-                        @map.x = @map.x - (8 - @correction_x) #BEHÄVER FIXA 0 VID FALSE SKALL BLI NOLL TYP
-                        @on_r = 2
+                        @map.x = @map.x - (8 - @correction_x)
+                        @x_dir = 0 
                     elsif @x_dir < 0
                         @player_hitbox.x = @player.x
                         @map.x = @map.x + (8 - @correction_x)
-                        @on_l = 2
+                        @x_dir = 0
                     end
                 end
-                p @correction_y = collision_dir_y(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @y_dir)
-                if @correction_y != false
+                if @correction_y != false #Reminder testa att byta mot noll
                     p "Inne i y"
                     if @y_dir > 0
                         @player_hitbox.y = @player.y
                         @map.y = @map.y - (8 - @correction_y) 
-                        @on_d = 2
+                        @y_dir = 0
                     elsif @y_dir < 0
                         @player_hitbox.y = @player.y
                         @map.y = @map.y + (8 - @correction_y) 
-                        @on_u = 2
+                        @y_dir = 0
                     end
                 end
             end
@@ -257,36 +217,23 @@ update do
         hitbox_update_characters += 1
     end
 
-    #Fixa bugg med upp och ner samt kanter
 
     @player.rotate = rotate_angle
 
     # x_dir postivt = höger, negativt = vänster
     # y_dir postivt = ner, negativt = upp
-
-    if @x_dir > 0 && @on_r == 2
-        @x_dir = 0
-        # p "sätter till noll h"
-    elsif @x_dir < 0 && @on_l == 2
-        @x_dir = 0
-        # p "sätter till noll v"
-    elsif @y_dir > 0 && @on_d == 2
-        # p "sätter till noll n"
-        @y_dir = 0
-    elsif @y_dir < 0 && @on_u == 2
-        # p "sätter till noll u"
-        @y_dir = 0
-    end
     
     @map.x -= @x_dir * @walk_speed
     @map.y -= @y_dir * @walk_speed
 
-    
-    # if @x_dir == 0 && @y_dir == 0
-    #     @player_hitbox.x = @player.x
-    #     @player_hitbox.y = @player.y
-    # end
-
+    j += 1
+    while j > 120 
+        if @x_dir == 0 && @y_dir == 0 && @right == 0 && @left == 0 && @up == 0 && @down == 0
+            @player_hitbox.x = @player.x
+            @player_hitbox.y = @player.y
+        end
+        j = 0
+    end
 
 
 
