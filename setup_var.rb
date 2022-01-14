@@ -190,13 +190,13 @@
 # )
 
 
-#Från vänster til höger:sprite, walk dist, vilken rail, relativ x, relativ y, går fram eller tillbak, shoot tick,
+#Från vänster til höger:sprite, walk dist, vilken rail, relativ x, relativ y, går fram eller tillbak, shoot tick, health
 @enemyarray = [
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 1, 0, 0, 1, 80],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 2, 0, 0, 1, 80],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 3, 0, 0, 1, 80],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 4, 0, 0, 1, 80],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 5, 0, 0, 1, 80],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 1, 0, 0, 1, 80, 100],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 2, 0, 0, 1, 80, 100],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 3, 0, 0, 1, 80, 100],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 4, 0, 0, 1, 80, 100],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 5, 0, 0, 1, 80, 100],
 ]
 
 @submap = Sprite.new('sprites\map_sub.png',
@@ -223,6 +223,11 @@
 [@submap_col, 23 * @pixel_scaler, 334 * @pixel_scaler]
 ]
 
+# Gamemode/Gamestate
+
+@difficulty_setting = 0
+@difficulty_multiplier = [1,1] #0 HP, #1 Shooting speed
+
 #Player variables
 @left = 0
 @right = 0
@@ -240,7 +245,6 @@
 @on_d = 0
 @correction_x = 0
 @correction_y = 0
-@sw_player = 0
 
 #Bullet variables
 @shooting = false
