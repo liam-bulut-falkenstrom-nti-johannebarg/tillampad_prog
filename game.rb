@@ -150,9 +150,9 @@ update do
     while hitbox_update_characters < @characters_array.length
         while hitbox_update_collision_boxes < @wall_array.length - 1
             if collision(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0]) == true
-                @correction_x = collision_dir_x(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @x_dir, @y_dir)
-                @correction_y = collision_dir_y(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @y_dir, @x_dir)
-                if @correction_x != 0 
+                p @correction_x = collision_dir_x(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @x_dir, @y_dir)
+                p @correction_y = collision_dir_y(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @y_dir, @x_dir)
+                if @correction_x != 0
                     if @x_dir > 0
                         @player_hitbox.x = @player.x
                         @map.x = @map.x - (8 - @correction_x)
