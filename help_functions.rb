@@ -37,6 +37,7 @@ def collision_dir_x(object_1, object_2, dir_x, dir_y)
         if collision_player(object_1, object_2, object_1.x, object_1_y) == false
             return 8-i
         end 
+        # p "Direction y: #{dir_y}"
         if dir_x > 0
             object_1.x = object_1.x - 1 
         elsif dir_x < 0
@@ -49,7 +50,7 @@ def collision_dir_x(object_1, object_2, dir_x, dir_y)
     elsif dir_x < 0
         object_1.x = object_1.x - 9 
     end
-    return 0
+    return 9
 end
 
 def collision_dir_y(object_1, object_2, dir_y, dir_x)
@@ -68,6 +69,7 @@ def collision_dir_y(object_1, object_2, dir_y, dir_x)
         if collision_player(object_1, object_2, object_1_x, object_1.y) == false
             return 8-i
         end 
+        # p "Direction y: #{dir_y}"
         if dir_y > 0
             object_1.y = object_1.y - 1 
         elsif dir_y < 0
@@ -80,7 +82,7 @@ def collision_dir_y(object_1, object_2, dir_y, dir_x)
     elsif dir_y < 0
         object_1.y = object_1.y - 9 
     end
-    return 0
+    return 9
 end
 
 def collision_player(object_1, object_2, object_1_x, object_1_y)
