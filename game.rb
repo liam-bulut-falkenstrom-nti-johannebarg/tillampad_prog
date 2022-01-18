@@ -21,6 +21,12 @@ on :key_held do |event|
             if @ammo_total >= 30
                 @reload = 1
             end
+        when '1'
+            @gamemode = 1
+        when '2'
+            @gamemode = 2
+        when '3'
+            @gamemode = 3
     end     
 end
 
@@ -102,6 +108,51 @@ update do
             @reload_time = 0
         end
     end
+
+
+
+    
+    if @gamemode == 1 #Easy
+        i = 0
+        @difficulty_multiplier[0] = 1
+        @difficulty_multiplier[1] = 1
+        p i
+        while i < @enemyarray[0].length - 2
+            p @difficulty_multiplier[0]
+            p @enemyarray[0][5]
+            p "i är #{i}"
+            @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP 
+            @enemyarray[i][6] = 80 * @difficulty_multiplier[1] #Shooting speed
+            i += 1
+        end
+        i = 0
+        @gamemode = 0
+    elsif @gamemode == 2 #Hard
+        i = 0
+        @difficulty_multiplier[0] = 3
+        @difficulty_multiplier[1] = 0.5
+        while i < @enemyarray.length - 2
+            @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP
+            @enemyarray[i][6] = 80 * @difficulty_multiplier[1] #Shooting speed
+            i += 1
+        end
+        i = 0
+        @gamemode = 0
+    elsif @gamemode == 3 #Doom
+        i = 0
+        @difficulty_multiplier[0] = 8
+        @difficulty_multiplier[1] = 0.125
+        while i < @enemyarray.length - 2
+            @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP
+            @enemyarray[i][6] = 80 * @difficulty_multiplier[1] #Shooting speed
+            i += 1
+        end
+        i = 0
+        @gamemode = 0
+    end
+
+    p "Shooting speed: #{@enemyarray[0][6]}"
+    p "HP: #{@enemyarray[0][7]}"
 
     #Hit collison Enviorment
 
@@ -199,7 +250,7 @@ update do
     @map.y -= @y_dir * @walk_speed
 
     j += 1
-    while j > 120 
+    while j > 60 
         if @x_dir == 0 && @y_dir == 0 && @right == 0 && @left == 0 && @up == 0 && @down == 0
 
             @player_hitbox.x = @player.x
@@ -211,7 +262,7 @@ update do
     i = 0
     while i < @enemyarray.length
         if @enemyarray[i][2] == 1
-            if @enemyarray[i][1] == 0
+            if @enemyarray[i][1] == 0 
                 @enemyarray[i][3] = 180 * @pixel_scaler
                 @enemyarray[i][4] = 145 * @pixel_scaler
                 @enemyarray[i][5] = 1
