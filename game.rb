@@ -150,8 +150,8 @@ update do
     while hitbox_update_characters < @characters_array.length
         while hitbox_update_collision_boxes < @wall_array.length - 1
             if collision(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0]) == true
-                p @correction_x = collision_dir_x(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @x_dir, @y_dir)
-                p @correction_y = collision_dir_y(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @y_dir, @x_dir)
+                @correction_x = collision_dir_x(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @x_dir, @y_dir)
+                @correction_y = collision_dir_y(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @y_dir, @x_dir)
                 if @correction_x != 0
                     if @x_dir > 0
                         @player_hitbox.x = @player.x
@@ -439,13 +439,18 @@ update do
                 end
             end
         elsif @enemyarray[i][2] == 4
+            if @enemyarray[i][0].rotate <= 0
+                @enemyarray[i][0].rotate += 360
+            elsif @enemyarray[i][0].rotate >= 360
+                @enemyarray[i][0].rotate -= 360
+            end
             if @enemyarray[i][1] == 0
                 @enemyarray[i][3] = 35 * @pixel_scaler
                 @enemyarray[i][4] = 360 * @pixel_scaler
                 @enemyarray[i][5] = 1
-                @enemyarray[i][0].rotate = -90
+                @enemyarray[i][0].rotate = 270
             elsif @enemyarray[i][1] <= 165
-                if (@enemyarray[i][5] == 1 && @enemyarray[i][0].rotate != -270) || (@enemyarray[i][5] == -1 && @enemyarray[i][0].rotate != -90)
+                if (@enemyarray[i][5] == 1 && @enemyarray[i][0].rotate != 90) || (@enemyarray[i][5] == -1 && @enemyarray[i][0].rotate != 270)
                     @enemyarray[i][0].rotate -= 5 * @enemyarray[i][5]
                     if @enemyarray[i][0].rotate%5 != 0
                         if @enemyarray[i][0].rotate < 0
@@ -455,15 +460,10 @@ update do
                         end
                     end
                     @enemyarray[i][0].rotate = @enemyarray[i][0].rotate.to_i
-                    if @enemyarray[i][0].rotate <= -360
-                        @enemyarray[i][0].rotate += 360
-                    elsif @enemyarray[i][0].rotate >= 360
-                        @enemyarray[i][0].rotate -= 360
-                    end
                 end
                 @enemyarray[i][4] += 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] <= 330
-                if (@enemyarray[i][5] == 1 && @enemyarray[i][0].rotate != 0) || (@enemyarray[i][5] == -1 && @enemyarray[i][0].rotate != -180)
+                if (@enemyarray[i][5] == 1 && @enemyarray[i][0].rotate != 360) || (@enemyarray[i][5] == -1 && @enemyarray[i][0].rotate != 180)
                     @enemyarray[i][0].rotate -= 5 * @enemyarray[i][5].abs
                     if @enemyarray[i][0].rotate%5 != 0
                         if @enemyarray[i][0].rotate < 0
@@ -472,12 +472,8 @@ update do
                             @enemyarray[i][0].rotate -= (@enemyarray[i][0].rotate%5).abs
                         end
                     end
+                    
                     @enemyarray[i][0].rotate = @enemyarray[i][0].rotate.to_i
-                    if @enemyarray[i][0].rotate <= -360
-                        @enemyarray[i][0].rotate += 360
-                    elsif @enemyarray[i][0].rotate >= 360
-                        @enemyarray[i][0].rotate -= 360
-                    end
                 end
                 @enemyarray[i][3] += 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] == 331
@@ -502,7 +498,7 @@ update do
                     end
                 end
             end
-            # p @enemyarray[i][0].rotate #SPINNAR FÖR ATT DE ALDRIG BLIR NEGATIVA VINKELVÄRDEN, ÄNDRA SÅ ATT DET KAN VARA BÅDE POSITIVT OCH NEGATIVT VÄRDE PÅ VINKELN
+            p @enemyarray[i][0].rotate #SPINNAR FÖR ATT DE ALDRIG BLIR NEGATIVA VINKELVÄRDEN, ÄNDRA SÅ ATT DET KAN VARA BÅDE POSITIVT OCH NEGATIVT VÄRDE PÅ VINKELN
         elsif @enemyarray[i][2] == 5
             if @enemyarray[i][1] == 0
                 @enemyarray[i][3] = 360 * @pixel_scaler
@@ -575,15 +571,29 @@ update do
 
     i = 0
     while i < @bullet_array.length
-        @bullet_array[i][4] += @bullet_array[i][2] * @bullet_speed
-        @bullet_array[i][5] += @bullet_array[i][3] * @bullet_speed
-        xy_array = xy_translate(@bullet_array[i][4], @bullet_array[i][5], @map)
-        @bullet_array[i][0].x = xy_array[0]
-        @bullet_array[i][0].y = xy_array[1]
-        @bullet_array[i][0].add
-        if @bullet_array[i][0].x > Window.width || @bullet_array[i][0].x < 0 || @bullet_array[i][0].y > Window.height || @bullet_array[i][0].y < 0
-            @bullet_array[i][1] = false
-            @bullet_array[i][0].remove
+        if @bullet_array[i][1] == true
+            @bullet_array[i][4] += @bullet_array[i][2] * @bullet_speed
+            @bullet_array[i][5] += @bullet_array[i][3] * @bullet_speed
+            xy_array = xy_translate(@bullet_array[i][4], @bullet_array[i][5], @map)
+            @bullet_array[i][0].x = xy_array[0]
+            @bullet_array[i][0].y = xy_array[1]
+            @bullet_array[i][0].add
+            if @bullet_array[i][0].x > Window.width || @bullet_array[i][0].x < 0 || @bullet_array[i][0].y > Window.height || @bullet_array[i][0].y < 0
+                @bullet_array[i][1] = false
+                @bullet_array[i][0].remove
+            else 
+                j = 0
+                while j < @enemyarray.length
+                    if collision(@enemyarray[j][0], @bullet_array[i][0]) == true
+                        @bullet_array[i][1] = false
+                        @bullet_array[i][0].remove
+                        @enemy_death_array << Sprite.new('sprites\enemy_death.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: @enemyarray[j][0].x, y: @enemyarray[j][0].y, loop: true, time: 100, rotate: @enemyarray[j][0].rotate)
+                        @enemyarray[j][0].remove
+                        @enemyarray[j][2] = 0
+                    end
+                    j += 1
+                end
+            end
         end
         i += 1
     end

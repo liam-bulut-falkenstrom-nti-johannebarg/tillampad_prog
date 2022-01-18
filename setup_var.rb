@@ -199,6 +199,8 @@
     [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 5, 0, 0, 1, 80],
 ]
 
+@enemy_death_array = []
+
 @submap = Sprite.new('sprites\map_sub.png',
     width: 500 * @pixel_scaler,
     height: 600 * @pixel_scaler,
