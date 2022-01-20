@@ -201,6 +201,8 @@
 
 @enemy_death_array = []
 
+@shooting_speed = 1
+
 @submap = Sprite.new('sprites\map_sub.png',
     width: 500 * @pixel_scaler,
     height: 600 * @pixel_scaler,
@@ -253,6 +255,8 @@
 @on_d = 0
 @correction_x = 0
 @correction_y = 0
+@gun_selected = 1 #2 ak, 1 pistol, 0 inget
+
 
 #Bullet variables
 @shooting = false
@@ -264,8 +268,12 @@
 @bullet_3_y = 0
 @bullet_array = [[@bullet_1, false, 0, 0, @bullet_1_x, @bullet_1_y], [@bullet_2, false, 0, 0, @bullet_2_x, @bullet_2_y], [@bullet_3, false, 0, 0, @bullet_3_x, @bullet_3_y]]
 @bullet_speed = 20
-@ammo_mag = 30
-@ammo_total = 120
+@ak_frame_counter = 5 #Går neråt
+@ak_shooting_on = 0
+@ammo_mag_ak = 30
+@ammo_total_ak = 120
+@ammo_mag_pistol = 13
+@ammo_total_pistol = 60
 @reload = 0
 @reload_time = 0
 @bullet_hitbox_array = [@bullet_hitbox_1, @bullet_hitbox_2, @bullet_hitbox_3]

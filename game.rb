@@ -18,15 +18,21 @@ on :key_held do |event|
         when 's'
             @down = 1
         when 'r'
-            if @ammo_total >= 30
+            if @gun_selected == 1 && @ammo_total_pistol >= 30
+                @reload = 1
+            elsif @gun_selected == 2 && @ammo_total_ak >= 30
                 @reload = 1
             end
-        when '1'
+        when '8'
             @gamemode = 1
-        when '2'
+        when '9'
             @gamemode = 2
-        when '3'
+        when '0'
             @gamemode = 3
+        when '1'
+            @gun_selected = 1
+        when '2'
+            @gun_selected = 2
     end     
 end
 
@@ -43,12 +49,28 @@ on :key_up do |event|
     end     
 end
 
-
 on :mouse_down do |event|
     case event.button
     when :left
-    if @ammo_mag > 0
+    if @ammo_mag_pistol > 0 && @gun_selected == 1
         @shooting = true
+    end
+    if @ammo_mag_ak > 0 && @gun_selected == 2
+        @ak_shooting_on = 1
+        @shooting = true
+    end  
+    when :middle
+
+    when :right
+
+    end
+end
+
+on :mouse_up do |event|
+    case event.button
+    when :left
+    if @ak_shooting_on == 1
+        @ak_shooting_on = 0
     end
     when :middle
 
@@ -85,7 +107,11 @@ update do
                 @bullet_array[i][3] = unit_vector[1]
                 @bullet_array[i][4] = (@player.x - @map.x  + @player.width/2).abs
                 @bullet_array[i][5] = (@player.y - @map.y + @player.height/2).abs
-                @ammo_mag -= 1
+                if @gun_selected == 1
+                    @ammo_mag_pistol -= 1
+                elsif @gun_selected == 2
+                    @ammo_mag_ak -= 1
+                end
                 i = @bullet_array.length
                 @player.play animations: :shoot
 
@@ -99,30 +125,43 @@ update do
         @shooting = false
     end
 
+
+
     if @reload == 1
         @reload_time += 1
         if @reload_time >= 60
-            @ammo_mag = 30
-            @ammo_total -= 30
-            @reload = 0
-            @reload_time = 0
+            if @gun_selected == 1
+                @ammo_mag_pistol = 13
+                @ammo_total_pistol -= 13
+                @reload = 0
+                @reload_time = 0
+            elsif @gun_selected == 2
+                @ammo_mag_ak = 30
+                @ammo_total_ak -= 30
+                @reload = 0
+                @reload_time = 0
+            end
         end
     end
 
+    if @ammo_mag_ak > 0 && @gun_selected == 2 && @ak_frame_counter <= 0 && @ak_shooting_on == 1
+        @shooting = true
+        @ak_frame_counter = 5
+    elsif @ammo_mag_ak > 0 && @gun_selected == 2 && @ak_frame_counter != 0 && @ak_shooting_on == 1
+        @ak_frame_counter -= 1
+    end
 
-
+    #difficulty multiplier
     
     if @gamemode == 1 #Easy
         i = 0
         @difficulty_multiplier[0] = 1
         @difficulty_multiplier[1] = 1
-        p i
         while i < @enemyarray[0].length - 2
-            p @difficulty_multiplier[0]
-            p @enemyarray[0][5]
-            p "i är #{i}"
+            @difficulty_multiplier[0]
+            @enemyarray[0][5]
             @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP 
-            @enemyarray[i][6] = 80 * @difficulty_multiplier[1] #Shooting speed
+            @shooting_speed = 1 * @difficulty_multiplier[1] #Shooting speed
             i += 1
         end
         i = 0
@@ -130,21 +169,21 @@ update do
     elsif @gamemode == 2 #Hard
         i = 0
         @difficulty_multiplier[0] = 3
-        @difficulty_multiplier[1] = 0.5
+        @difficulty_multiplier[1] = 6
         while i < @enemyarray.length - 2
             @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP
-            @enemyarray[i][6] = 80 * @difficulty_multiplier[1] #Shooting speed
+            @shooting_speed = 1 * @difficulty_multiplier[1] #Shooting speed
             i += 1
         end
         i = 0
         @gamemode = 0
     elsif @gamemode == 3 #Doom
         i = 0
-        @difficulty_multiplier[0] = 8
-        @difficulty_multiplier[1] = 0.125
+        @difficulty_multiplier[0] = 24
+        @difficulty_multiplier[1] = 300
         while i < @enemyarray.length - 2
             @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP
-            @enemyarray[i][6] = 80 * @difficulty_multiplier[1] #Shooting speed
+            @shooting_speed = 1 * @difficulty_multiplier[1] #Shooting speed
             i += 1
         end
         i = 0
@@ -248,7 +287,7 @@ update do
     @map.y -= @y_dir * @walk_speed
 
     j += 1
-    while j > 60 
+    while j > 20
         if @x_dir == 0 && @y_dir == 0 && @right == 0 && @left == 0 && @up == 0 && @down == 0
 
             @player_hitbox.x = @player.x
@@ -258,6 +297,7 @@ update do
         j = 0
     end
     i = 0
+
     while i < @enemyarray.length
         if @enemyarray[i][2] == 1
             if @enemyarray[i][1] == 0 
@@ -328,8 +368,8 @@ update do
                 enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
                 if (@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270
                     @enemyarray[i][0].rotate = enemy_rotate_angle
-                    @enemyarray[i][6] += 1
-                    if @enemyarray[i][6] == 150
+                    @enemyarray[i][6] += @shooting_speed
+                    if @enemyarray[i][6] >= 150
                         @enemy_bullet_array << [
                             Sprite.new('sprites\bullet.png', width: 2 * (@pixel_scaler-1), height: 1 * (@pixel_scaler-1), rotate: @enemyarray[i][0].rotate), 
                             enemy_unit_vector[0], 
@@ -392,8 +432,8 @@ update do
                 enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
                 if (@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270
                     @enemyarray[i][0].rotate = enemy_rotate_angle
-                    @enemyarray[i][6] += 1
-                    if @enemyarray[i][6] == 150
+                    @enemyarray[i][6] += @shooting_speed
+                    if @enemyarray[i][6] >= 150
                         @enemy_bullet_array << [
                             Sprite.new('sprites\bullet.png', width: 2 * (@pixel_scaler-1), height: 1 * (@pixel_scaler-1), rotate: @enemyarray[i][0].rotate), 
                             enemy_unit_vector[0], 
@@ -474,8 +514,8 @@ update do
                 enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
                 if (@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270
                     @enemyarray[i][0].rotate = enemy_rotate_angle
-                    @enemyarray[i][6] += 1
-                    if @enemyarray[i][6] == 150
+                    @enemyarray[i][6] += @shooting_speed
+                    if @enemyarray[i][6] >= 150
                         @enemy_bullet_array << [
                             Sprite.new('sprites\bullet.png', width: 2 * (@pixel_scaler-1), height: 1 * (@pixel_scaler-1), rotate: @enemyarray[i][0].rotate), 
                             enemy_unit_vector[0], 
@@ -534,7 +574,7 @@ update do
                 enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
                 if (@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270
                     @enemyarray[i][0].rotate = enemy_rotate_angle
-                    @enemyarray[i][6] += 1
+                    @enemyarray[i][6] +=  @shooting_speed
                     if @enemyarray[i][6] == 150
                         @enemy_bullet_array << [
                             Sprite.new('sprites\bullet.png', width: 2 * (@pixel_scaler-1), height: 1 * (@pixel_scaler-1), rotate: @enemyarray[i][0].rotate), 
@@ -547,7 +587,7 @@ update do
                     end
                 end
             end
-            p @enemyarray[i][0].rotate #SPINNAR FÖR ATT DE ALDRIG BLIR NEGATIVA VINKELVÄRDEN, ÄNDRA SÅ ATT DET KAN VARA BÅDE POSITIVT OCH NEGATIVT VÄRDE PÅ VINKELN
+            @enemyarray[i][0].rotate #SPINNAR FÖR ATT DE ALDRIG BLIR NEGATIVA VINKELVÄRDEN, ÄNDRA SÅ ATT DET KAN VARA BÅDE POSITIVT OCH NEGATIVT VÄRDE PÅ VINKELN
         elsif @enemyarray[i][2] == 5
             if @enemyarray[i][1] == 0
                 @enemyarray[i][3] = 360 * @pixel_scaler
@@ -562,8 +602,8 @@ update do
                 enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
                 if (@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270
                     @enemyarray[i][0].rotate = enemy_rotate_angle
-                    @enemyarray[i][6] += 1
-                    if @enemyarray[i][6] == 150
+                    @enemyarray[i][6] += @shooting_speed
+                    if @enemyarray[i][6] >= 150
                         @enemy_bullet_array << [
                             Sprite.new('sprites\bullet.png', width: 2 * (@pixel_scaler-1), height: 1 * (@pixel_scaler-1), rotate: @enemyarray[i][0].rotate), 
                             enemy_unit_vector[0], 
@@ -674,7 +714,7 @@ update do
     #Här är debugging kod -----------------------------------------------------------------------------------------------------------------------
     @text.remove
     @text = Text.new(
-        "#{(get :fps).to_i} #{rotate_angle.to_i} #{@ammo_mag}/#{@ammo_total} #{@hit_collision_test}",
+        "#{(get :fps).to_i} #{rotate_angle.to_i} #{@ammo_mag_ak}/#{@ammo_total_ak} #{@ammo_mag_pistol}/#{@ammo_total_pistol} ",
         x: 20, y: 20,
         style: 'bold',
         size: 40,
