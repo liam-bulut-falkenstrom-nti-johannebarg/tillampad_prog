@@ -228,6 +228,12 @@
 @difficulty_setting = 0
 @difficulty_multiplier = [1,1] #0 HP, #1 Shooting speed
 
+#Defuse gamemode
+@bomb_timer = 0
+@time_left = 0
+
+
+
 #Player variables
 @left = 0
 @right = 0

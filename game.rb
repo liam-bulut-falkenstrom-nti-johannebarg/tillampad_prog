@@ -151,8 +151,6 @@ update do
         @gamemode = 0
     end
 
-    p "Shooting speed: #{@enemyarray[0][6]}"
-    p "HP: #{@enemyarray[0][7]}"
 
     #Hit collison Enviorment
 
