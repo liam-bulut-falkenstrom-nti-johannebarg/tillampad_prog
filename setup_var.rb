@@ -14,7 +14,7 @@
     height: 158 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col2 = Sprite.new('sprites\hit_collision.png',
@@ -22,7 +22,7 @@
     height: 322 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col3 = Sprite.new('sprites\hit_collision.png',
@@ -30,7 +30,7 @@
     height: 120 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col4 = Sprite.new('sprites\hit_collision.png',
@@ -38,7 +38,7 @@
     height: 37 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col5 = Sprite.new('sprites\hit_collision.png',
@@ -46,7 +46,7 @@
     height: 563 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col6 = Sprite.new('sprites\hit_collision.png',
@@ -54,7 +54,7 @@
     height: 46 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col7 = Sprite.new('sprites\hit_collision.png',
@@ -62,7 +62,7 @@
     height: 178 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col8 = Sprite.new('sprites\hit_collision.png',
@@ -70,7 +70,7 @@
     height: 40 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col9 = Sprite.new('sprites\hit_collision.png',
@@ -78,7 +78,7 @@
     height: 203 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col10 = Sprite.new('sprites\hit_collision.png',
@@ -86,7 +86,7 @@
     height: 91 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col11 = Sprite.new('sprites\hit_collision.png',
@@ -94,7 +94,7 @@
     height: 134 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @submap_col = Sprite.new('sprites\hit_collision.png',
@@ -137,7 +137,7 @@
     y: (180/2 - 12.5) * @pixel_scaler,
     loop: true,
     time: 100,
-    opacity: 0.4
+    opacity: 0
 )
 
 @bullet_1 = Sprite.new('sprites\bullet.png',
@@ -190,13 +190,13 @@
 # )
 
 
-#Från vänster til höger:sprite, walk dist, vilken rail, relativ x, relativ y, går fram eller tillbak, shoot tick, health
+#Från vänster til höger:sprite, walk dist, vilken rail, relativ x, relativ y, går fram eller tillbak, shoot tick, health, direction
 @enemyarray = [
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 1, 0, 0, 1, 80, 100],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 2, 0, 0, 1, 80, 100],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 3, 0, 0, 1, 80, 100],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 4, 0, 0, 1, 80, 100],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 5, 0, 0, 1, 80, 100],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 1, 0, 0, 1, 80, 100, 0],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 2, 0, 0, 1, 80, 100, 0],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 3, 0, 0, 1, 80, 100, 0],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 4, 0, 0, 1, 80, 100, 0],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 5, 0, 0, 1, 80, 100, 9],
 ]
 
 @enemy_death_array = []
@@ -247,6 +247,9 @@
 @on_d = 0
 @correction_x = 0
 @correction_y = 0
+
+@player_x = @player.x - @map.x
+@player_y = @player.y - @map.y 
 
 #Bullet variables
 @shooting = false

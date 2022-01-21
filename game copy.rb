@@ -65,7 +65,7 @@ update do
     player_center_array = [(@player.x + @player.width/2), (@player.y + @player.height/2)] # Kan komma att ändras i och med att mittpunkten för sprites skiljer sig. 
     rotate_angle = mouse_angle(mousex, mousey, player_center_array)[0]
     unit_vector = mouse_angle(mousex, mousey, player_center_array)[1]
-    dist_array = mouse_angle(mousex, mousey, [150.137*@pixel_scaler, 90.137*@pixel_scaler])[2] #float för att undvika zero division
+
     if (@right - @left).abs == (@down - @up).abs
         @x_dir = (@right - @left) * 0.70 # typ roten ur 2 dividerat på 2 (cirkelns ekvation)
         @y_dir = (@down - @up) * 0.70 
@@ -116,11 +116,11 @@ update do
         i = 0
         @difficulty_multiplier[0] = 1
         @difficulty_multiplier[1] = 1
-        # p i
+        p i
         while i < @enemyarray[0].length - 2
-            # p @difficulty_multiplier[0]
-            # p @enemyarray[0][5]
-            # p "i är #{i}"
+            p @difficulty_multiplier[0]
+            p @enemyarray[0][5]
+            p "i är #{i}"
             @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP 
             @enemyarray[i][6] = 80 * @difficulty_multiplier[1] #Shooting speed
             i += 1
@@ -151,8 +151,8 @@ update do
         @gamemode = 0
     end
 
-    # p "Shooting speed: #{@enemyarray[0][6]}"
-    # p "HP: #{@enemyarray[0][7]}"
+    p "Shooting speed: #{@enemyarray[0][6]}"
+    p "HP: #{@enemyarray[0][7]}"
 
     #Hit collison Enviorment
 
@@ -246,24 +246,9 @@ update do
     # x_dir postivt = höger, negativt = vänster
     # y_dir postivt = ner, negativt = upp
     
-    # if (@player.x + @player.width/2 > 100 * @pixel_scaler || dist_array[0] < 0) && (@player.x + @player.width/2 < 200 * @pixel_scaler || dist_array[0] > 0)
-    #     @map.x += -dist_array[0]/80
-    # end
-    # if (@player.y + @player.height/2 > 50 * @pixel_scaler || dist_array[1] < 0) && (@player.y + @player.height/2 < 130 * @pixel_scaler ||  dist_array[1] > 0)
-    #     @map.y += -dist_array[1]/80
-    # end
-
-    # @player_x += @x_dir * @walk_speed
-    # @player_y += @y_dir * @walk_speed # TYP SCREEN MOVEMENT MEN JAG FATTAR INTE OLIVERS KOD
-
     @map.x -= @x_dir * @walk_speed
     @map.y -= @y_dir * @walk_speed
 
-    # xy_array = xy_translate(@player_x, @player_y, @map)
-    # @player.x = xy_array[0]
-    # @player.y = xy_array[1]
-
-    
     j += 1
     while j > 60 
         if @x_dir == 0 && @y_dir == 0 && @right == 0 && @left == 0 && @up == 0 && @down == 0
@@ -278,70 +263,153 @@ update do
 
     i = 0
     while i < @enemyarray.length
-        if @enemyarray[i][2] == 0
-            @enemyarray[i][3] = -180 * @pixel_scaler
-            @enemyarray[i][4] = -145 * @pixel_scaler
-        elsif @enemyarray[i][2] == 1
+        if @enemyarray[i][2] == 1
             if @enemyarray[i][1] == 0 
                 @enemyarray[i][3] = 180 * @pixel_scaler
                 @enemyarray[i][4] = 145 * @pixel_scaler
                 @enemyarray[i][5] = 1
+                @enemyarray[i][0].rotate = 0 
             elsif @enemyarray[i][1] <= 100
-                @enemyarray[i][8] = 3 * @enemyarray[i][5]
+                # if (@enemyarray[i][5] == 1 && @enemyarray[i][0].rotate != -180) || (@enemyarray[i][5] == -1 && @enemyarray[i][0].rotate != 0)
+                #     @enemyarray[i][0].rotate -= 5 * @enemyarray[i][5]
+                #     if @enemyarray[i][0].rotate%5 != 0
+                #         if @enemyarray[i][0].rotate < 0
+                #             @enemyarray[i][0].rotate += (@enemyarray[i][0].rotate%5).abs
+                #         else
+                #             @enemyarray[i][0].rotate -= (@enemyarray[i][0].rotate%5).abs
+                #         end
+                #     end
+                #     @enemyarray[i][0].rotate = @enemyarray[i][0].rotate.to_i
+                #     if @enemyarray[i][0].rotate <= -360
+                #         @enemyarray[i][0].rotate += 360
+                #     elsif @enemyarray[i][0].rotate >= 360
+                #         @enemyarray[i][0].rotate -= 360
+                #     end
+                # end
                 @enemyarray[i][3] -= 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] <= 255
-                @enemyarray[i][8] = 4 * @enemyarray[i][5]
                 @enemyarray[i][4] += 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] <= 335
-                @enemyarray[i][8] = 1 * @enemyarray[i][5]
                 @enemyarray[i][3] += 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] == 336
                 @enemyarray[i][5] = -1
+            end
+            @enemyarray[i][1] += @enemyarray[i][5]
+            if (@enemyarray[i][0].x - @player.x).abs < 100*@pixel_scaler && (@enemyarray[i][0].y - @player.y).abs < 80*@pixel_scaler
+                enemy_rotate_angle = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[0]
+                enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
+                if (@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270
+                    @enemyarray[i][0].rotate = enemy_rotate_angle
+                    @enemyarray[i][6] += 1
+                    if @enemyarray[i][6] == 150
+                        @enemy_bullet_array << [
+                            Sprite.new('sprites\bullet.png', width: 2 * (@pixel_scaler-1), height: 1 * (@pixel_scaler-1), rotate: @enemyarray[i][0].rotate), 
+                            enemy_unit_vector[0], 
+                            enemy_unit_vector[1], 
+                            @enemyarray[i][3]+@enemyarray[i][0].width/2, 
+                            @enemyarray[i][4]+@enemyarray[i][0].height/2
+                        ]
+                        @enemyarray[i][6] = 0
+                    end
+                end
             end
         elsif @enemyarray[i][2] == 2
             if @enemyarray[i][1] == 0
                 @enemyarray[i][3] = 305 * @pixel_scaler
                 @enemyarray[i][4] = 70 * @pixel_scaler
                 @enemyarray[i][5] = 1
+                @enemyarray[i][0].rotate = -90
             elsif @enemyarray[i][1] <= 155
-                @enemyarray[i][8] = 4 * @enemyarray[i][5]
                 @enemyarray[i][4] += 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] <= 315
-                @enemyarray[i][8] = 3 * @enemyarray[i][5]
                 @enemyarray[i][3] -= 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] == 316
                 @enemyarray[i][5] = -1
+            end
+            @enemyarray[i][1] += @enemyarray[i][5]
+            if (@enemyarray[i][0].x - @player.x).abs < 100*@pixel_scaler && (@enemyarray[i][0].y - @player.y).abs < 80*@pixel_scaler
+                enemy_rotate_angle = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[0]
+                enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
+                if (@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270
+                    @enemyarray[i][0].rotate = enemy_rotate_angle
+                    @enemyarray[i][6] += 1
+                    if @enemyarray[i][6] == 150
+                        @enemy_bullet_array << [
+                            Sprite.new('sprites\bullet.png', width: 2 * (@pixel_scaler-1), height: 1 * (@pixel_scaler-1), rotate: @enemyarray[i][0].rotate), 
+                            enemy_unit_vector[0], 
+                            enemy_unit_vector[1], 
+                            @enemyarray[i][3]+@enemyarray[i][0].width/2, 
+                            @enemyarray[i][4]+@enemyarray[i][0].height/2
+                        ]
+                        @enemyarray[i][6] = 0
+                    end
+                end
             end
         elsif @enemyarray[i][2] == 3
             if @enemyarray[i][1] == 0
                 @enemyarray[i][3] = 410 * @pixel_scaler
                 @enemyarray[i][4] = 135 * @pixel_scaler
                 @enemyarray[i][5] = 1
+                @enemyarray[i][0].rotate = -90
             elsif @enemyarray[i][1] <= 275
-                @enemyarray[i][8] = 4 * @enemyarray[i][5]
                 @enemyarray[i][4] += 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] <= 410
-                @enemyarray[i][8] = 3 * @enemyarray[i][5]
                 @enemyarray[i][3] -= 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] <= 530
-                @enemyarray[i][8] = 4 * @enemyarray[i][5]
                 @enemyarray[i][4] += 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] == 531
                 @enemyarray[i][5] = -1
+            end
+            @enemyarray[i][1] += @enemyarray[i][5]
+            if (@enemyarray[i][0].x - @player.x).abs < 100*@pixel_scaler && (@enemyarray[i][0].y - @player.y).abs < 80*@pixel_scaler
+                enemy_rotate_angle = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[0]
+                enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
+                if (@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270
+                    @enemyarray[i][0].rotate = enemy_rotate_angle
+                    @enemyarray[i][6] += 1
+                    if @enemyarray[i][6] == 150
+                        @enemy_bullet_array << [
+                            Sprite.new('sprites\bullet.png', width: 2 * (@pixel_scaler-1), height: 1 * (@pixel_scaler-1), rotate: @enemyarray[i][0].rotate), 
+                            enemy_unit_vector[0], 
+                            enemy_unit_vector[1], 
+                            @enemyarray[i][3]+@enemyarray[i][0].width/2, 
+                            @enemyarray[i][4]+@enemyarray[i][0].height/2
+                        ]
+                        @enemyarray[i][6] = 0
+                    end
+                end
             end
         elsif @enemyarray[i][2] == 4
             if @enemyarray[i][1] == 0
                 @enemyarray[i][3] = 35 * @pixel_scaler
                 @enemyarray[i][4] = 360 * @pixel_scaler
                 @enemyarray[i][5] = 1
+                @enemyarray[i][0].rotate = 270
             elsif @enemyarray[i][1] <= 165
-                @enemyarray[i][8] = 4 * @enemyarray[i][5]
                 @enemyarray[i][4] += 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] <= 330
-                @enemyarray[i][8] = 1 * @enemyarray[i][5]
                 @enemyarray[i][3] += 1 * @pixel_scaler * @enemyarray[i][5]
             elsif @enemyarray[i][1] == 331
                 @enemyarray[i][5] = -1
+            end
+            @enemyarray[i][1] += @enemyarray[i][5]
+            if (@enemyarray[i][0].x - @player.x).abs < 100*@pixel_scaler && (@enemyarray[i][0].y - @player.y).abs < 80*@pixel_scaler
+                enemy_rotate_angle = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[0]
+                enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
+                if (@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270
+                    @enemyarray[i][0].rotate = enemy_rotate_angle
+                    @enemyarray[i][6] += 1
+                    if @enemyarray[i][6] == 150
+                        @enemy_bullet_array << [
+                            Sprite.new('sprites\bullet.png', width: 2 * (@pixel_scaler-1), height: 1 * (@pixel_scaler-1), rotate: @enemyarray[i][0].rotate), 
+                            enemy_unit_vector[0], 
+                            enemy_unit_vector[1], 
+                            @enemyarray[i][3]+@enemyarray[i][0].width/2, 
+                            @enemyarray[i][4]+@enemyarray[i][0].height/2
+                        ]
+                        @enemyarray[i][6] = 0
+                    end
+                end
             end
         elsif @enemyarray[i][2] == 5
             if @enemyarray[i][1] == 0
@@ -352,58 +420,25 @@ update do
             if @enemyarray[i][0].rotate <= -360
                 @enemyarray[i][0].rotate += 360
             end 
-        end
-        
-        @enemyarray[i][1] += @enemyarray[i][5]
-
-        enemy_rotate_angle = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[0]
-        enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
-        if (@enemyarray[i][0].x - @player.x).abs < 100*@pixel_scaler && (@enemyarray[i][0].y - @player.y).abs < 80*@pixel_scaler && ((@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270)
-            @enemyarray[i][0].rotate = enemy_rotate_angle
-            @enemyarray[i][6] += 1
-            if @enemyarray[i][6] == 150
-                @enemy_bullet_array << [
-                    Sprite.new('sprites\bullet.png', width: 2 * (@pixel_scaler-1), height: 1 * (@pixel_scaler-1), rotate: @enemyarray[i][0].rotate), 
-                    enemy_unit_vector[0], 
-                    enemy_unit_vector[1], 
-                    @enemyarray[i][3]+@enemyarray[i][0].width/2, 
-                    @enemyarray[i][4]+@enemyarray[i][0].height/2
-                ]
-                @enemyarray[i][6] = 0
-            end
-        else
-            if i != 4
-                turn_angle = (@enemyarray[i][8] - 1).abs * -90
-            
-                if turn_angle == 0
-                    turn_angle -= 360
-                elsif turn_angle < -360
-                    turn_angle += 360
-                end
-
-                if @enemyarray[i][0].rotate >= 0
-                    @enemyarray[i][0].rotate -= 360
-                elsif @enemyarray[i][0].rotate < -360
-                    @enemyarray[i][0].rotate += 360
-                end
-
-                if @enemyarray[i][0].rotate%10 != 0
-                    @enemyarray[i][0].rotate -= @enemyarray[i][0].rotate%10
-                end
-
-                if @enemyarray[i][0].rotate != turn_angle
-                    if i == 0
-                        p @enemyarray[i][0].rotate
-                    end
-                    
-                    if @enemyarray[i][0].rotate < turn_angle && turn_angle - @enemyarray[i][0].rotate < (@enemyarray[i][0].rotate+360) - turn_angle || @enemyarray[i][0].rotate > turn_angle && turn_angle - (@enemyarray[i][0].rotate-360) < @enemyarray[i][0].rotate - turn_angle
-                        @enemyarray[i][0].rotate += 10
-                    else 
-                        @enemyarray[i][0].rotate -= 10
+            if (@enemyarray[i][0].x - @player.x).abs < 100*@pixel_scaler && (@enemyarray[i][0].y - @player.y).abs < 80*@pixel_scaler
+                enemy_rotate_angle = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[0]
+                enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
+                if (@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270
+                    @enemyarray[i][0].rotate = enemy_rotate_angle
+                    @enemyarray[i][6] += 1
+                    if @enemyarray[i][6] == 150
+                        @enemy_bullet_array << [
+                            Sprite.new('sprites\bullet.png', width: 2 * (@pixel_scaler-1), height: 1 * (@pixel_scaler-1), rotate: @enemyarray[i][0].rotate), 
+                            enemy_unit_vector[0], 
+                            enemy_unit_vector[1], 
+                            @enemyarray[i][3]+@enemyarray[i][0].width/2, 
+                            @enemyarray[i][4]+@enemyarray[i][0].height/2
+                        ]
+                        @enemyarray[i][6] = 0
                     end
                 end
-
             end
+
         end
         i += 1
     end
@@ -464,29 +499,14 @@ update do
                     if collision(@enemyarray[j][0], @bullet_array[i][0]) == true
                         @bullet_array[i][1] = false
                         @bullet_array[i][0].remove
-                        @enemyarray[j][7] -= 50
-                        if @enemyarray[j][7] == 0
-                            @enemy_death_array << [
-                                Sprite.new('sprites\enemy_death.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 0, y: 0, loop: false, time: 100, rotate: @enemyarray[j][0].rotate),
-                                @enemyarray[j][3],
-                                @enemyarray[j][4],
-                                0
-                            ]
-                            @enemyarray[j][1] = 0
-                            @enemyarray[j][2] = 0
-                            @enemyarray[j][5] = 1
-                            @enemyarray[j][0].remove
-                        end
-                    end
-                    j += 1
-                end
-                
-                j = 0
-                while j < @wall_array.length - 1
-                    if collision(@wall_array[j][0], @bullet_array[i][0]) == true
-                        @bullet_array[i][1] = false
-                        @bullet_array[i][0].remove
-                        j = @wall_array.length - 1
+                        @enemy_death_array << [
+                            Sprite.new('sprites\enemy_death.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 0, y: 0, loop: false, time: 100, rotate: @enemyarray[j][0].rotate),
+                            @enemyarray[j][3],
+                            @enemyarray[j][4],
+                            0
+                        ]
+                        @enemyarray[j][0].remove
+                        @enemyarray[j][2] = 0
                     end
                     j += 1
                 end
