@@ -1,134 +1,95 @@
 @main_menu = true
 
 @startup_map = Sprite.new('sprites\startup_map.png',
-    width: 1366,
-    height: 768,
+    width: 300 * @pixel_scaler,
+    height: 180 * @pixel_scaler,
     x: 0,
     y: 0
 )
 
 @button_play = Sprite.new('sprites\button_play.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 55 * 5
-)
-
-@button_play_hover = Sprite.new('sprites\button_play_hover.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 55 * 5
+    clip_width: 36,
+    width: 72 * @pixel_scaler,
+    height: 22 * @pixel_scaler,
+    x: 60 * @pixel_scaler,
+    y: 60 * @pixel_scaler,
+    loop: true,
+    animations: {
+        normal: 0..0,
+        hover: 1..1,
+    }
 )
 
 @button_settings = Sprite.new('sprites\button_settings.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 67.5 * 5
-)
-
-@button_settings_hover = Sprite.new('sprites\button_settings_hover.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 67.5 * 5,
+    clip_width: 36,
+    width: 72 * @pixel_scaler,
+    height: 22 * @pixel_scaler,
+    x: 60 * @pixel_scaler,
+    y: 90 * @pixel_scaler,
+    loop: true,
+    animations: {
+        normal: 0..0,
+        hover: 1..1,
+    }
 )
 
 @button_exit = Sprite.new('sprites\button_exit.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 80 * 5
-)
-
-@button_exit_hover = Sprite.new('sprites\button_exit_hover.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 80 * 5,
+    clip_width: 36,
+    width: 72 * @pixel_scaler,
+    height: 22 * @pixel_scaler,
+    x: 60 * @pixel_scaler,
+    y: 120 * @pixel_scaler,
+    loop: true,
+    animations: {
+        normal: 0..0,
+        hover: 1..1,
+    }
 )
 
 @button_easy = Sprite.new('sprites\button_easy.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 55 * 5,
+    clip_width: 36,
+    width: 72 * @pixel_scaler,
+    height: 22 * @pixel_scaler,
+    x: 60 * @pixel_scaler,
+    y: 60 * @pixel_scaler,
+    loop: true,
+    animations: {
+        normal: 0..0,
+        hover: 1..1,
+    }
 )
-
-@button_easy_hover = Sprite.new('sprites\button_easy_hover.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 55 * 5,
-)
+@button_easy.remove
 
 @button_hard = Sprite.new('sprites\button_hard.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 67.5 * 5,
+    clip_width: 36,
+    width: 72 * @pixel_scaler,
+    height: 22 * @pixel_scaler,
+    x: 60 * @pixel_scaler,
+    y: 90 * @pixel_scaler,
+    loop: true,
+    animations: {
+        normal: 0..0,
+        hover: 1..1,
+    }
 )
-
-@button_hard_hover = Sprite.new('sprites\button_hard_hover.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 67.5 * 5,
-)
+@button_hard.remove
 
 @button_doom = Sprite.new('sprites\button_doom.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 80 * 5,
+    clip_width: 36,
+    width: 72 * @pixel_scaler,
+    height: 22 * @pixel_scaler,
+    x: 60 * @pixel_scaler,
+    y: 120 * @pixel_scaler,
+    loop: true,
+    animations: {
+        normal: 0..0,
+        hover: 1..1,
+    }
 )
+@button_doom.remove
 
-@button_doom_hover = Sprite.new('sprites\button_doom_hover.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 80 * 5,
-)
+@button_array = [@button_play, @button_settings, @button_exit, @button_easy, @button_hard, @button_doom]
 
-@button_return = Sprite.new('sprites\button_return.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 92.5 * 5,
-)
+@click = false
 
-@button_return_hover = Sprite.new('sprites\button_return_hover.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 92.5 * 5,
-)
-
-@button_controls = Sprite.new('sprites\button_controls.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 55 * 5,
-)
-
-@button_controls_hover = Sprite.new('sprites\button_controls_hover.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 55 * 5,
-)
-
-@button_volum = Sprite.new('sprites\button_volum.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 67.5 * 5,
-)
-
-@button_volum_hover = Sprite.new('sprites\button_volum_hover.png',
-    width: 75 * 2,
-    height: 15 * 2,
-    x: 60 * 5,
-    y: 67.5 * 5,
-)
+@settings = false
