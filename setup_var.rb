@@ -228,13 +228,20 @@
 ]
 
 # Gamemode/Gamestate
-
-@difficulty_setting = 0
+@difficulty = 0
 @difficulty_multiplier = [1,1] #0 HP, #1 Shooting speed
-
+@gamemode = 1 # 0 av, 1 är arcade, 2 är bomp plant
+@gamemode_active = 1
+ 
 #Defuse gamemode
 @bomb_timer = 0
+@bomb_active = 0
 @time_left = 0
+@round_start = 0
+@rounds_won = 0
+@rounds_lost = 0 
+@round_active = 0
+
 
 
 

@@ -24,11 +24,11 @@ on :key_held do |event|
                 @reload = 1
             end
         when '8'
-            @gamemode = 1
+            @difficulty = 1
         when '9'
-            @gamemode = 2
+            @difficulty = 2
         when '0'
-            @gamemode = 3
+            @difficulty = 3
         when '1'
             @gun_selected = 1
         when '2'
@@ -125,8 +125,6 @@ update do
         @shooting = false
     end
 
-
-
     if @reload == 1
         @reload_time += 1
         if @reload_time >= 60
@@ -151,43 +149,52 @@ update do
         @ak_frame_counter -= 1
     end
 
+    #Gamemode setting
+
+    if @gamemode == 1 #Arcade
+        @gamemode_active = 1
+        @gamemode = 0
+    elsif @gamemode == 2 #Bomb plant
+        @gamemode_active = 2
+        @gamemode = 0
+    end
+
     #difficulty multiplier
     
-    if @gamemode == 1 #Easy
+    if @difficulty == 1 #Easy
         i = 0
         @difficulty_multiplier[0] = 1
         @difficulty_multiplier[1] = 1
-        while i < @enemyarray[0].length - 2
-            @difficulty_multiplier[0]
-            @enemyarray[0][5]
+        @enemyarray[i][7]
+        while i < @enemyarray[0].length - 3
             @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP 
             @shooting_speed = 1 * @difficulty_multiplier[1] #Shooting speed
             i += 1
         end
         i = 0
-        @gamemode = 0
-    elsif @gamemode == 2 #Hard
+        @difficulty = 0
+    elsif @difficulty == 2 #Hard
         i = 0
         @difficulty_multiplier[0] = 3
-        @difficulty_multiplier[1] = 6
+        @difficulty_multiplier[1] = 3
         while i < @enemyarray.length - 2
             @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP
             @shooting_speed = 1 * @difficulty_multiplier[1] #Shooting speed
             i += 1
         end
         i = 0
-        @gamemode = 0
-    elsif @gamemode == 3 #Doom
+        @difficulty = 0
+    elsif @difficulty == 3 #Doom
         i = 0
-        @difficulty_multiplier[0] = 24
-        @difficulty_multiplier[1] = 300
+        @difficulty_multiplier[0] = 8
+        @difficulty_multiplier[1] = 8
         while i < @enemyarray.length - 2
             @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP
             @shooting_speed = 1 * @difficulty_multiplier[1] #Shooting speed
             i += 1
         end
         i = 0
-        @gamemode = 0
+        @difficulty = 0
     end
 
 
@@ -297,6 +304,48 @@ update do
         j = 0
     end
     i = 0
+
+    #Bomb plant gamemode
+
+    if @gamemode_active = 2
+        
+        if @round_start = 1
+            @bomb_timer = 60 * 30
+            @time_left = 60 * 50
+            @rounds_lost = 0
+            @rounds_won = 0
+           @round_start = 0
+        end
+
+        if @round_active = 1
+
+            @time_left -= 1
+
+            if @bomb_active = 1
+                @bomb_timer -= 1
+            end
+
+            if @bomb_timer <= 0
+                @rounds_won += 1
+                @round_active = 0
+            end
+
+            if @round_timer <= 0
+                @rounds_lost += 1
+                @round_active = 0
+            end
+
+        end
+
+        if @rounds_won >= 8
+            @gamemode_active = 0
+            p "Du vann!"
+        elsif @rounds_lost >= 8
+            @gamemode_active = 0
+            p "Du vann!"
+        end
+
+    end
 
     while i < @enemyarray.length
         if @enemyarray[i][2] == 1
