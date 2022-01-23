@@ -9,12 +9,28 @@
     y: 0 * @pixel_scaler
 )
 
+@fadeout = Sprite.new('sprites\fadeout.png',
+    width: 500 * @pixel_scaler,
+    height: 600 * @pixel_scaler,
+    x: 0 * @pixel_scaler,
+    y: 0 * @pixel_scaler
+)
+@fadeout.remove
+
+@gameover_text = Sprite.new('sprites\gameover_text.png',
+    width: 300 * @pixel_scaler,
+    height: 180 * @pixel_scaler,
+    x: 0 * @pixel_scaler,
+    y: 0 * @pixel_scaler
+)
+@gameover_text.remove
+
 @wall_col1 = Sprite.new('sprites\hit_collision.png',
     width: 191 * @pixel_scaler,
     height: 158 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col2 = Sprite.new('sprites\hit_collision.png',
@@ -22,7 +38,7 @@
     height: 322 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col3 = Sprite.new('sprites\hit_collision.png',
@@ -30,7 +46,7 @@
     height: 120 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col4 = Sprite.new('sprites\hit_collision.png',
@@ -38,7 +54,7 @@
     height: 37 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col5 = Sprite.new('sprites\hit_collision.png',
@@ -46,7 +62,7 @@
     height: 563 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col6 = Sprite.new('sprites\hit_collision.png',
@@ -54,7 +70,7 @@
     height: 46 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col7 = Sprite.new('sprites\hit_collision.png',
@@ -62,7 +78,7 @@
     height: 178 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col8 = Sprite.new('sprites\hit_collision.png',
@@ -70,7 +86,7 @@
     height: 40 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col9 = Sprite.new('sprites\hit_collision.png',
@@ -78,7 +94,7 @@
     height: 203 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col10 = Sprite.new('sprites\hit_collision.png',
@@ -86,7 +102,7 @@
     height: 91 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @wall_col11 = Sprite.new('sprites\hit_collision.png',
@@ -94,7 +110,7 @@
     height: 134 * @pixel_scaler,
     x: 0,
     y: 0,
-    opacity: 0.5
+    opacity: 0
 )
 
 @submap_col = Sprite.new('sprites\hit_collision.png',
@@ -122,10 +138,9 @@
     loop: false,
     time: 20,
     animations: {
-        shoot: 0...5,
-        big: 1..1,
-        small: 2..2,
-        smallest: 3..3
+        shoot: 0...4,
+        death: 4...10,
+        linger: 10..10,
     }
 )
 
@@ -137,7 +152,7 @@
     y: (180/2 - 12.5) * @pixel_scaler,
     loop: true,
     time: 100,
-    opacity: 0.4
+    opacity: 0
 )
 
 @bullet_1 = Sprite.new('sprites\bullet.png',
@@ -168,35 +183,13 @@
     time: 100
 )
 
-# @bullet_hitbox_1 = Sprite.new('sprites\hit_collision.png',
-# width: 2 * @pixel_scaler,
-# height: 1 * @pixel_scaler,
-# x: 110,
-# y: 100,
-# )
-
-# @bullet_hitbox_2 = Sprite.new('sprites\hit_collision.png',
-# width: 2 * @pixel_scaler,
-# height: 1 * @pixel_scaler,
-# x: 110,
-# y: 100,
-# )
-
-# @bullet_hitbox_3 = Sprite.new('sprites\hit_collision.png',
-# width: 2 * @pixel_scaler,
-# height: 1 * @pixel_scaler,
-# x: 110,
-# y: 100,
-# )
-
-
-#Från vänster til höger:sprite, walk dist, vilken rail, relativ x, relativ y, går fram eller tillbak, shoot tick, health
+#Från vänster til höger:sprite, walk dist, vilken rail, relativ x, relativ y, går fram eller tillbak, shoot tick, health, direction
 @enemyarray = [
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 1, 0, 0, 1, 80, 100],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 2, 0, 0, 1, 80, 100],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 3, 0, 0, 1, 80, 100],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 4, 0, 0, 1, 80, 100],
-    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 5, 0, 0, 1, 80, 100],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 1, 0, 0, 1, 80, 100, 0],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 2, 0, 0, 1, 80, 100, 0],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 3, 0, 0, 1, 80, 100, 0],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 4, 0, 0, 1, 80, 100, 0],
+    [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 5, 0, 0, 1, 80, 100, 9],
 ]
 
 @enemy_death_array = []
@@ -232,7 +225,8 @@
 @difficulty_multiplier = [1,1] #0 HP, #1 Shooting speed
 @gamemode = 1 # 0 av, 1 är arcade, 2 är bomp plant
 @gamemode_active = 1
- 
+@gamestate = 0
+
 #Defuse gamemode
 @bomb_timer = 0
 @bomb_active = 0
@@ -263,6 +257,14 @@
 @correction_x = 0
 @correction_y = 0
 @gun_selected = 1 #2 ak, 1 pistol, 0 inget
+
+@player_x = @player.x - @map.x
+@player_y = @player.y - @map.y 
+
+@damaged_timer = 0
+@damaged = false
+
+@death_timer = 0 
 
 
 #Bullet variables
@@ -331,3 +333,11 @@
 @health_bar_array = ["ten", "nine", "eight", "seven", "six", "five", "four", "three", "two", "one", "zero"]
 @health_index = 0
 
+#music
+
+@shoot_sfx = Sound.new('music&sfx\shoot.wav')
+@menu_theme = Music.new('music&sfx\track1.wav')
+@game_theme = Music.new('music&sfx\track2.wav')
+@music_tick = 0
+
+ 
