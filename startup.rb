@@ -173,6 +173,12 @@ end
             @button_volum.add
         end
 
+        if hover((get :mouse_x), (get :mouse_y), @button_credits) == true
+            @button_credits.remove
+        else
+            @button_credits.add
+        end
+
         if hover((get :mouse_x), (get :mouse_y), @button_return) == true
             @button_return.remove
         else
