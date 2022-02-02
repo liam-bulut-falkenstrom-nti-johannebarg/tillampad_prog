@@ -1,4 +1,3 @@
-# Hej klassen! Välkommen till spelet!
 require 'ruby2d'
 require_relative "setup_var.rb"
 require_relative "help_functions.rb"
@@ -117,26 +116,41 @@ update do
             if hover(mousex, mousey, @button_array[i])
                 @button_array[i].play animation: :hover
                 if @click
-                    if i == 0 && @settings == false
-                        @gamestate = 1
+                    if i == 0 && @play == false && @settings == false && @main_menu == true
+                        @play = true
                         i = @button_array.length
-                    elsif i == 1 && @settings == false
+                        @main_menu = false
+                        @settings = false
+                    elsif i == 1 && @settings == false && @play == false && @main_menu == true
                         @settings = true
                         i = @button_array.length
-                    elsif i == 2 && @settings == false
+                        @main_menu = false
+                        @play = false
+                    elsif i == 2 && @settings == false && @play == false && @main_menu == true
                         exit
-                    elsif i == 3 && @settings == true
+                    elsif i == 3 && @play == true
                         @gamemode = 1
-                        @settings = false
+                        @gamestate = 1
                         i = @button_array.length
-                    elsif i == 4 && @settings == true
+                    elsif i == 4 && @play == true
                         @gamemode = 2
-                        @settings = false
+                        @gamestate = 1
                         i = @button_array.length
-                    elsif i == 5 && @settings == true
+                    elsif i == 5 && @play == true
                         @gamemode = 3
-                        @settings = false
+                        @gamestate = 1
                         i = @button_array.length
+                    elsif i == 6 && @settings == true
+                        i = @button_array.length
+                    elsif i == 7 && @settings == true
+                        i = @button_array.length
+                    elsif i == 8 && @settings == true
+                        i = @button_array.length
+                    elsif i == 9 && @settings == true
+                        @settings = false
+                        @main_menu == true
+                        i = @button_array.length
+                        @play == false
                     end
                 end
             else
@@ -145,20 +159,39 @@ update do
             i += 1
         end
 
-        if @settings == true
-            @button_easy.add
-            @button_hard.add
-            @button_doom.add
-            @button_play.remove
-            @button_settings.remove
-            @button_exit.remove
-        else
-            @button_easy.remove
-            @button_hard.remove
-            @button_doom.remove
+        if @main_menu == true
             @button_play.add
             @button_settings.add
             @button_exit.add
+            @button_easy.remove
+            @button_hard.remove
+            @button_doom.remove
+            @button_controls.remove
+            @button_volume.remove
+            @button_credits.remove
+            @button_return.remove
+        elsif @settings == true
+            @button_controls.add
+            @button_volume.add
+            @button_credits.add
+            @button_return.add
+            @button_easy.remove
+            @button_hard.remove
+            @button_doom.remove
+            @button_play.remove
+            @button_settings.remove
+            @button_exit.remove
+        elsif @play == true
+            @button_easy.add
+            @button_hard.add
+            @button_doom.add
+            @button_controls.remove
+            @button_volume.remove
+            @button_credits.remove
+            @button_return.remove
+            @button_play.remove
+            @button_settings.remove
+            @button_exit.remove
         end
         @click = false
     elsif @gamestate == 1

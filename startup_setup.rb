@@ -9,8 +9,8 @@
 
 @button_play = Sprite.new('sprites\button_play.png',
     clip_width: 36,
-    width: 72 * @pixel_scaler,
-    height: 22 * @pixel_scaler,
+    width: 65 * @pixel_scaler,
+    height: 20 * @pixel_scaler,
     x: 60 * @pixel_scaler,
     y: 60 * @pixel_scaler,
     loop: true,
@@ -22,8 +22,8 @@
 
 @button_settings = Sprite.new('sprites\button_settings.png',
     clip_width: 36,
-    width: 72 * @pixel_scaler,
-    height: 22 * @pixel_scaler,
+    width: 65 * @pixel_scaler,
+    height: 20 * @pixel_scaler,
     x: 60 * @pixel_scaler,
     y: 90 * @pixel_scaler,
     loop: true,
@@ -35,8 +35,8 @@
 
 @button_exit = Sprite.new('sprites\button_exit.png',
     clip_width: 36,
-    width: 72 * @pixel_scaler,
-    height: 22 * @pixel_scaler,
+    width: 65 * @pixel_scaler,
+    height: 20 * @pixel_scaler,
     x: 60 * @pixel_scaler,
     y: 120 * @pixel_scaler,
     loop: true,
@@ -48,8 +48,8 @@
 
 @button_easy = Sprite.new('sprites\button_easy.png',
     clip_width: 36,
-    width: 72 * @pixel_scaler,
-    height: 22 * @pixel_scaler,
+    width: 65 * @pixel_scaler,
+    height: 20 * @pixel_scaler,
     x: 60 * @pixel_scaler,
     y: 60 * @pixel_scaler,
     loop: true,
@@ -62,8 +62,8 @@
 
 @button_hard = Sprite.new('sprites\button_hard.png',
     clip_width: 36,
-    width: 72 * @pixel_scaler,
-    height: 22 * @pixel_scaler,
+    width: 65 * @pixel_scaler,
+    height: 20 * @pixel_scaler,
     x: 60 * @pixel_scaler,
     y: 90 * @pixel_scaler,
     loop: true,
@@ -76,8 +76,8 @@
 
 @button_doom = Sprite.new('sprites\button_doom.png',
     clip_width: 36,
-    width: 72 * @pixel_scaler,
-    height: 22 * @pixel_scaler,
+    width: 65 * @pixel_scaler,
+    height: 20 * @pixel_scaler,
     x: 60 * @pixel_scaler,
     y: 120 * @pixel_scaler,
     loop: true,
@@ -88,8 +88,66 @@
 )
 @button_doom.remove
 
-@button_array = [@button_play, @button_settings, @button_exit, @button_easy, @button_hard, @button_doom]
+@button_controls = Sprite.new('sprites\button_controls_combine.png',
+clip_width: 36,
+    width: 65 * @pixel_scaler,
+    height: 20 * @pixel_scaler,
+    x: 60 * @pixel_scaler,
+    y: 60 * @pixel_scaler,
+    loop: true,
+    animations: {
+        normal: 0..0,
+        hover: 1..1,
+    }
+)
+@button_controls.remove
+
+@button_volume = Sprite.new('sprites\button_volume_combine.png',
+clip_width: 36,
+    width: 65 * @pixel_scaler,
+    height: 20 * @pixel_scaler,
+    x: 60 * @pixel_scaler,
+    y: 80 * @pixel_scaler,
+    loop: true,
+    animations: {
+        normal: 0..0,
+        hover: 1..1,
+    }
+)
+@button_volume.remove
+
+@button_credits = Sprite.new('sprites\button_credits_combine.png',
+clip_width: 36,
+    width: 65 * @pixel_scaler,
+    height: 20 * @pixel_scaler,
+    x: 60 * @pixel_scaler,
+    y: 100 * @pixel_scaler,
+    loop: true,
+    animations: {
+        normal: 0..0,
+        hover: 1..1,
+    }
+)
+@button_credits.remove
+
+@button_return = Sprite.new('sprites\button_return_combine.png',
+clip_width: 36,
+    width: 65 * @pixel_scaler,
+    height: 20 * @pixel_scaler,
+    x: 60 * @pixel_scaler,
+    y: 120 * @pixel_scaler,
+    loop: true,
+    animations: {
+        normal: 0..0,
+        hover: 1..1,
+    }
+)
+@button_return.remove
+
+@button_array = [@button_play, @button_settings, @button_exit, @button_easy, @button_hard, @button_doom, @button_controls, @button_volume, @button_credits, @button_return]
 
 @click = false
 
 @settings = false
+
+@play = false
