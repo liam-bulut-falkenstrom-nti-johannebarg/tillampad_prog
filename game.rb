@@ -116,17 +116,19 @@ update do
             if hover(mousex, mousey, @button_array[i])
                 @button_array[i].play animation: :hover
                 if @click
-                    if i == 0 && @play == false && @settings == false && @main_menu == true
+                    if i == 0 && @play == false && @settings == false && @credits == false && @main_menu == true
                         @play = true
                         i = @button_array.length
                         @main_menu = false
                         @settings = false
-                    elsif i == 1 && @settings == false && @play == false && @main_menu == true
+                        @credits = false
+                    elsif i == 1 && @settings == false && @play == false && @credits == false && @main_menu == true
                         @settings = true
                         i = @button_array.length
                         @main_menu = false
                         @play = false
-                    elsif i == 2 && @settings == false && @play == false && @main_menu == true
+                        @credits = false
+                    elsif i == 2 && @settings == false && @play == false && @credits == false && @main_menu == true
                         exit
                     elsif i == 3 && @play == true
                         @gamemode = 1
@@ -142,15 +144,40 @@ update do
                         i = @button_array.length
                     elsif i == 6 && @settings == true
                         i = @button_array.length
-                    elsif i == 7 && @settings == true
+                    elsif i == 7 && @play == false && @main_menu == false && @credits == false && @settings == true
+                        @volume = true
                         i = @button_array.length
-                    elsif i == 8 && @settings == true
-                        i = @button_array.length
-                    elsif i == 9 && @settings == true
+                        @credits = false
                         @settings = false
-                        @main_menu == true
+                        @play = false
+                        @main_menu = false
+                    elsif i == 8 && @play == false && @main_menu == false && @credits == false && @settings == true
+                        @credits = true
                         i = @button_array.length
-                        @play == false
+                        @settings = false
+                        @play = false
+                        @main_menu = false
+                    elsif i == 9 && @play == false && @main_menu == false && @credits == false && @settings == true || @volume == true
+                        @main_menu = true
+                        i = @button_array.length
+                        @play = false
+                        @settings = false
+                        @credits = false
+                        @volume = false
+                    elsif i == 10 && @play == false && @main_menu == false && @settings == false && @credits == true || @controls == true
+                        @settings = true
+                        i = @button_array.length
+                        @play = false
+                        @main_menu = false
+                        @credits = false
+                        @volume = false
+                        @controls = false
+                    elsif i == 11 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == false && @volume == true
+                        i = @button_array.length
+                        # Ha på musik
+                    elsif i == 12 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == false && @volume == true
+                        i = @button_array.length
+                        # stäng av musik
                     end
                 end
             else
@@ -163,6 +190,7 @@ update do
             @button_play.add
             @button_settings.add
             @button_exit.add
+            @hud_credits.remove
             @button_easy.remove
             @button_hard.remove
             @button_doom.remove
@@ -170,25 +198,66 @@ update do
             @button_volume.remove
             @button_credits.remove
             @button_return.remove
+            @button_cross.remove
+            @button_soundon.remove
+            @button_soundoff.remove
         elsif @settings == true
             @button_controls.add
             @button_volume.add
             @button_credits.add
             @button_return.add
+            @hud_credits.remove
             @button_easy.remove
             @button_hard.remove
             @button_doom.remove
             @button_play.remove
             @button_settings.remove
             @button_exit.remove
+            @button_cross.remove
+            @button_soundon.remove
+            @button_soundoff.remove
         elsif @play == true
             @button_easy.add
             @button_hard.add
             @button_doom.add
+            @hud_credits.remove
             @button_controls.remove
             @button_volume.remove
             @button_credits.remove
             @button_return.remove
+            @button_play.remove
+            @button_settings.remove
+            @button_exit.remove
+            @button_cross.remove
+            @button_soundon.remove
+            @button_soundoff.remove
+        elsif @credits == true
+            @hud_credits.add
+            @button_cross.add
+            @button_easy.remove
+            @button_hard.remove
+            @button_doom.remove
+            @button_controls.remove
+            @button_volume.remove
+            @button_credits.remove
+            @button_return.remove
+            @button_play.remove
+            @button_settings.remove
+            @button_exit.remove
+            @button_soundon.remove
+            @button_soundoff.remove
+        elsif @volume == true
+            @button_soundon.add
+            @button_soundoff.add
+            @button_return.add
+            @button_cross.remove
+            @hud_credits.remove
+            @button_easy.remove
+            @button_hard.remove
+            @button_doom.remove
+            @button_controls.remove
+            @button_volume.remove
+            @button_credits.remove
             @button_play.remove
             @button_settings.remove
             @button_exit.remove
