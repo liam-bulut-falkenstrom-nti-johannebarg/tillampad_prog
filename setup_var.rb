@@ -221,20 +221,9 @@
 ]
 
 # Gamemode/Gamestate
-@difficulty = 0
 @difficulty_multiplier = [1,1] #0 HP, #1 Shooting speed
-@gamemode = 1 # 0 av, 1 är arcade, 2 är bomp plant
-@gamemode_active = 1
+@gamemode = 1 #1 är easy, 2 är hard, 3 är doom
 @gamestate = 0
-
-#Defuse gamemode
-@bomb_timer = 0
-@bomb_active = 0
-@time_left = 0
-@round_start = 0
-@rounds_won = 0
-@rounds_lost = 0 
-@round_active = 0
 
 #Player variables
 @left = 0
@@ -298,6 +287,23 @@
     ""
 )
 
+@text_ammo_mag_pistol = Text.new(
+    ""
+)
+
+@text_ammo_total_pistol = Text.new(
+    ""
+)
+
+@text_ammo_mag_ak = Text.new(
+    ""
+)
+
+@text_ammo_total_ak = Text.new(
+    ""
+)
+
+
 #HUD
 @hud = Sprite.new('sprites\Hud.png',
     width: 300 * @pixel_scaler,
@@ -329,6 +335,23 @@
 )
 @health_bar_array = ["ten", "nine", "eight", "seven", "six", "five", "four", "three", "two", "one", "zero"]
 @health_index = 0
+
+@pistol_siluette = Sprite.new('sprites/pistol_siluette.png',
+    width: 20 * @pixel_scaler,
+    height: 9 * @pixel_scaler, 
+    x: 240 * @pixel_scaler,
+    y: 165 * @pixel_scaler,
+    loop: true
+)
+
+@ak_siluette = Sprite.new('sprites/ak_siluette.png',
+    width: 20 * @pixel_scaler,
+    height: 9 * @pixel_scaler, 
+    x: 240 * @pixel_scaler,
+    y: 165 * @pixel_scaler,
+    loop: true
+)
+
 
 #music
 
