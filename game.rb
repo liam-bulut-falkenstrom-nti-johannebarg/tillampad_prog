@@ -1,4 +1,3 @@
-# Hej klassen! Välkommen till spelet!
 require 'ruby2d'
 require_relative "setup_var.rb"
 require_relative "help_functions.rb"
@@ -34,10 +33,6 @@ on :key_held do |event|
             @gun_selected = 1
         when '2'
             @gun_selected = 2
-        when 't'
-            @gamemode = 1
-        when 'g'
-            @gamemode = 2
     end     
 end
 
@@ -121,26 +116,41 @@ update do
             if hover(mousex, mousey, @button_array[i])
                 @button_array[i].play animation: :hover
                 if @click
-                    if i == 0 && @settings == false
-                        @gamestate = 1
+                    if i == 0 && @play == false && @settings == false && @main_menu == true
+                        @play = true
                         i = @button_array.length
-                    elsif i == 1 && @settings == false
+                        @main_menu = false
+                        @settings = false
+                    elsif i == 1 && @settings == false && @play == false && @main_menu == true
                         @settings = true
                         i = @button_array.length
-                    elsif i == 2 && @settings == false
+                        @main_menu = false
+                        @play = false
+                    elsif i == 2 && @settings == false && @play == false && @main_menu == true
                         exit
-                    elsif i == 3 && @settings == true
+                    elsif i == 3 && @play == true
                         @gamemode = 1
-                        @settings = false
+                        @gamestate = 1
                         i = @button_array.length
-                    elsif i == 4 && @settings == true
+                    elsif i == 4 && @play == true
                         @gamemode = 2
-                        @settings = false
+                        @gamestate = 1
                         i = @button_array.length
-                    elsif i == 5 && @settings == true
+                    elsif i == 5 && @play == true
                         @gamemode = 3
-                        @settings = false
+                        @gamestate = 1
                         i = @button_array.length
+                    elsif i == 6 && @settings == true
+                        i = @button_array.length
+                    elsif i == 7 && @settings == true
+                        i = @button_array.length
+                    elsif i == 8 && @settings == true
+                        i = @button_array.length
+                    elsif i == 9 && @settings == true
+                        @settings = false
+                        @main_menu == true
+                        i = @button_array.length
+                        @play == false
                     end
                 end
             else
@@ -149,20 +159,39 @@ update do
             i += 1
         end
 
-        if @settings == true
-            @button_easy.add
-            @button_hard.add
-            @button_doom.add
-            @button_play.remove
-            @button_settings.remove
-            @button_exit.remove
-        else
-            @button_easy.remove
-            @button_hard.remove
-            @button_doom.remove
+        if @main_menu == true
             @button_play.add
             @button_settings.add
             @button_exit.add
+            @button_easy.remove
+            @button_hard.remove
+            @button_doom.remove
+            @button_controls.remove
+            @button_volume.remove
+            @button_credits.remove
+            @button_return.remove
+        elsif @settings == true
+            @button_controls.add
+            @button_volume.add
+            @button_credits.add
+            @button_return.add
+            @button_easy.remove
+            @button_hard.remove
+            @button_doom.remove
+            @button_play.remove
+            @button_settings.remove
+            @button_exit.remove
+        elsif @play == true
+            @button_easy.add
+            @button_hard.add
+            @button_doom.add
+            @button_controls.remove
+            @button_volume.remove
+            @button_credits.remove
+            @button_return.remove
+            @button_play.remove
+            @button_settings.remove
+            @button_exit.remove
         end
         @click = false
     elsif @gamestate == 1
@@ -179,14 +208,6 @@ update do
             @music_tick += 1
         end
         @game_theme.loop = true
-
-
-
-
-
-
-
-
 
         mousex = get :mouse_x
         mousey = get :mouse_y
@@ -239,9 +260,6 @@ update do
         @gamemode = 0
     elsif @gamemode == 2 #Bomb plant
         @gamemode_active = 2
-        @map.x = -130*@pixel_scaler
-        @map.y = -320*@pixel_scaler
-
         @gamemode = 0
     end
 
@@ -273,7 +291,7 @@ update do
 
         #difficulty multiplier
         
-        if @difficulty == 1 #Easy
+        if @gamemode == 1 #Easy
             i = 0
             @difficulty_multiplier[0] = 1
             @difficulty_multiplier[1] = 1
@@ -283,8 +301,8 @@ update do
                 i += 1
             end
             i = 0
-            @difficulty = 0
-        elsif @difficulty == 2 #Hard
+            @gamemode = 0
+        elsif @gamemode == 2 #Hard
             i = 0
             @difficulty_multiplier[0] = 3
             @difficulty_multiplier[1] = 6
@@ -294,18 +312,18 @@ update do
                 i += 1
             end
             i = 0
-            @difficulty = 0
-        elsif @difficulty == 3 #Doom
+            @gamemode = 0
+        elsif @gamemode == 3 #Doom
             i = 0
             @difficulty_multiplier[0] = 8
-            @difficulty_multiplier[1] = 8
+            @difficulty_multiplier[1] = 30
             while i < @enemyarray.length - 2
                 @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP
                 @shooting_speed = 1 * @difficulty_multiplier[1] #Shooting speed
                 i += 1
             end
             i = 0
-            @difficulty = 0
+            @gamemode = 0
         end
 
         # p "Shooting speed: #{@enemyarray[0][6]}"
@@ -442,7 +460,7 @@ update do
             @time_left = 60 * 50
             @rounds_lost = 0
             @rounds_won = 0
-            @round_start = 0
+           @round_start = 0
         end
 
         if @round_active == 1
@@ -473,13 +491,11 @@ update do
             p "Du vann!"
         end
 
-
     end
 
+  
         i = 0
         while i < @enemyarray.length
-            
-        if @gamemode_active == 1
             if @enemyarray[i][2] == 0
                 @enemyarray[i][3] = -180 * @pixel_scaler
                 @enemyarray[i][4] = -145 * @pixel_scaler
@@ -555,13 +571,8 @@ update do
                     @enemyarray[i][0].rotate += 360
                 end 
             end
-        elsif @gamemode_active == 2
-
-        end
-
+            
             @enemyarray[i][1] += @enemyarray[i][5]
-
-    
 
             enemy_rotate_angle = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[0]
             enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
@@ -612,8 +623,6 @@ update do
             i += 1
         end
         
-
-
         i = 0
         while i < @enemyarray.length
             xy_array = xy_translate(@enemyarray[i][3], @enemyarray[i][4], @map)
