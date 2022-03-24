@@ -5,7 +5,7 @@ require_relative "startup_setup.rb"
 
 set width: 300 * @pixel_scaler
 set height: 180 * @pixel_scaler
-set resizable: true
+set fullscreen: true
 
 on :key_held do |event|
     case event.key
@@ -71,7 +71,7 @@ on :mouse_down do |event|
 end
 
 on :key_down do |event|
-    if @gamestate == 2 && @death_timer > 30
+    if @gamestate == 2 || @gamestate == 3
         exit
     end
 end
@@ -96,9 +96,9 @@ update do
     if @gamestate == 0
         if @music_tick == 0
             @menu_theme.play
-            @menu_theme.loop = true
             @music_tick += 1
         end 
+
         mousex = get :mouse_x
         mousey = get :mouse_y
 
@@ -116,17 +116,23 @@ update do
             if hover(mousex, mousey, @button_array[i])
                 @button_array[i].play animation: :hover
                 if @click
-                    if i == 0 && @play == false && @settings == false && @main_menu == true
+                    if i == 0 && @play == false && @settings == false && @credits == false && @main_menu == true
                         @play = true
                         i = @button_array.length
                         @main_menu = false
                         @settings = false
-                    elsif i == 1 && @settings == false && @play == false && @main_menu == true
+                        @credits = false
+                        @volume = false
+                        @controls = false
+                    elsif i == 1 && @settings == false && @play == false && @credits == false && @main_menu == true
                         @settings = true
                         i = @button_array.length
                         @main_menu = false
                         @play = false
-                    elsif i == 2 && @settings == false && @play == false && @main_menu == true
+                        @credits = false
+                        @volume = false
+                        @controls = false
+                    elsif i == 2 && @settings == false && @play == false && @credits == false && @main_menu == true
                         exit
                     elsif i == 3 && @play == true
                         @gamemode = 1
@@ -140,17 +146,60 @@ update do
                         @gamemode = 3
                         @gamestate = 1
                         i = @button_array.length
-                    elsif i == 6 && @settings == true
+                    elsif i == 6 && @play == false && @main_menu == false && @credits == false && @settings == true
+                        @controls = true
                         i = @button_array.length
-                    elsif i == 7 && @settings == true
-                        i = @button_array.length
-                    elsif i == 8 && @settings == true
-                        i = @button_array.length
-                    elsif i == 9 && @settings == true
+                        @credits = false
                         @settings = false
-                        @main_menu == true
+                        @play = false
+                        @main_menu = false
+                        @volume = false
+                    elsif i == 7 && @play == false && @main_menu == false && @credits == false && @settings == true
+                        @volume = true
                         i = @button_array.length
-                        @play == false
+                        @credits = false
+                        @settings = false
+                        @play = false
+                        @main_menu = false
+                        @controls = false
+                    elsif i == 8 && @play == false && @main_menu == false && @credits == false && @settings == true
+                        @credits = true
+                        i = @button_array.length
+                        @settings = false
+                        @play = false
+                        @main_menu = false
+                        @controls = false
+                        @volume = false
+                    elsif i == 9 && @play == false && @main_menu == false && @credits == false && @settings == true || @volume == true
+                        @main_menu = true
+                        i = @button_array.length
+                        @play = false
+                        @settings = false
+                        @credits = false
+                        @volume = false
+                        @controls = false
+                    elsif i == 10 && @play == false && @main_menu == false && @settings == false && @controls == false && @credits == true
+                        @settings = true
+                        i = @button_array.length
+                        @play = false
+                        @main_menu = false
+                        @credits = false
+                        @volume = false
+                        @controls = false
+                    elsif i == 11 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == true
+                        @settings = true
+                        i = @button_array.length
+                        @play = false
+                        @main_menu = false
+                        @credits = false
+                        @volume = false
+                        @controls = false
+                    elsif i == 12 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == false && @volume == true
+                        i = @button_array.length
+                        # Ha på musik
+                    elsif i == 13 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == false && @volume == true
+                        i = @button_array.length
+                        # stäng av musik
                     end
                 end
             else
@@ -163,6 +212,7 @@ update do
             @button_play.add
             @button_settings.add
             @button_exit.add
+            @hud_credits.remove
             @button_easy.remove
             @button_hard.remove
             @button_doom.remove
@@ -170,21 +220,33 @@ update do
             @button_volume.remove
             @button_credits.remove
             @button_return.remove
+            @button_cross_credits.remove
+            @button_cross_controls.remove
+            @button_soundon.remove
+            @button_soundoff.remove
+            @hud_controls.remove
         elsif @settings == true
             @button_controls.add
             @button_volume.add
             @button_credits.add
             @button_return.add
+            @hud_credits.remove
             @button_easy.remove
             @button_hard.remove
             @button_doom.remove
             @button_play.remove
             @button_settings.remove
             @button_exit.remove
+            @button_cross_credits.remove
+            @button_cross_controls.remove
+            @button_soundon.remove
+            @button_soundoff.remove
+            @hud_controls.remove
         elsif @play == true
             @button_easy.add
             @button_hard.add
             @button_doom.add
+            @hud_credits.remove
             @button_controls.remove
             @button_volume.remove
             @button_credits.remove
@@ -192,6 +254,62 @@ update do
             @button_play.remove
             @button_settings.remove
             @button_exit.remove
+            @button_cross_credits.remove
+            @button_cross_controls.remove
+            @button_soundon.remove
+            @button_soundoff.remove
+            @hud_controls.remove
+        elsif @controls == true
+            @hud_controls.add
+            @button_cross_controls.add
+            @button_cross_credits.remove
+            @button_soundon.remove
+            @button_soundoff.remove
+            @button_return.remove
+            @hud_credits.remove
+            @button_easy.remove
+            @button_hard.remove
+            @button_doom.remove
+            @button_controls.remove
+            @button_volume.remove
+            @button_credits.remove
+            @button_play.remove
+            @button_settings.remove
+            @button_exit.remove
+        elsif @credits == true
+            @hud_credits.add
+            @button_cross_credits.add
+            @button_cross_controls.remove
+            @button_easy.remove
+            @button_hard.remove
+            @button_doom.remove
+            @button_controls.remove
+            @button_volume.remove
+            @button_credits.remove
+            @button_return.remove
+            @button_play.remove
+            @button_settings.remove
+            @button_exit.remove
+            @button_soundon.remove
+            @button_soundoff.remove
+            @hud_controls.remove
+        elsif @volume == true
+            @button_soundon.add
+            @button_soundoff.add
+            @button_return.add
+            @button_cross_credits.remove
+            @button_cross_controls
+            @hud_credits.remove
+            @button_easy.remove
+            @button_hard.remove
+            @button_doom.remove
+            @button_controls.remove
+            @button_volume.remove
+            @button_credits.remove
+            @button_play.remove
+            @button_settings.remove
+            @button_exit.remove
+            @hud_controls.remove
         end
         @click = false
     elsif @gamestate == 1
@@ -204,7 +322,6 @@ update do
         if @music_tick == 1
             @game_theme.play
             @game_theme.volume = 40
-            @game_theme.loop = true
             @music_tick += 1
         end
         @game_theme.loop = true
@@ -706,9 +823,21 @@ update do
         
         @health_bar.play animation: :"#{@health_bar_array[@health_index]}"
 
+        i = 0
+        @gamestate = 3
+        while i < @enemyarray.length     
+            if @enemyarray[i][7] != 0
+                @gamestate = 1
+            end
+            i += 1
+        end
+
         if @health_index == 10
             @gamestate = 2
         end
+
+        
+        
         #Här är debugging kod -----------------------------------------------------------------------------------------------------------------------
         # @text.remove
         # @text = Text.new(
@@ -798,8 +927,20 @@ update do
             @gameover_text.z = @fadeout.z + 1
         end
         @death_timer += 1 
+
+    elsif @gamestate == 3
+        @fadeout.add
+        @fadeout.z = 999
+        @player.z = @fadeout.z + 1
+        if @death_timer == 60
+            @win_text.add
+            @win_text.z = @fadeout.z + 1
+        end
+        @death_timer += 1 
     
     end
+    
+    
 end
 
 show
