@@ -144,14 +144,6 @@
 )
 @button_return.remove
 
-@button_cross = Sprite.new('sprites\button_smallboxcrossed.png',
-    width: 10 * @pixel_scaler,
-    height: 10 * @pixel_scaler,
-    x: 285 * @pixel_scaler,
-    y: 4 * @pixel_scaler,
-)
-@button_cross.remove
-
 @button_soundon = Sprite.new('sprites\button_soundsymbol.png',
     width: 20 * @pixel_scaler,
     height: 20 * @pixel_scaler,
@@ -176,7 +168,31 @@
 )
 @hud_credits.remove
 
-@button_array = [@button_play, @button_settings, @button_exit, @button_easy, @button_hard, @button_doom, @button_controls, @button_volume, @button_credits, @button_return, @button_cross, @button_soundon, @button_soundoff]
+@hud_controls = Sprite.new('sprites\hud_controls.png',
+    width: 300 * @pixel_scaler,
+    height: 180 * @pixel_scaler,
+    x: 0,
+    y: 0
+)
+@hud_controls.remove
+
+@button_cross_credits = Sprite.new('sprites\button_crossed_credits.png',
+    width: 10 * @pixel_scaler,
+    height: 10 * @pixel_scaler,
+    x: 285 * @pixel_scaler,
+    y: 4 * @pixel_scaler,
+)
+@button_cross_credits.remove
+
+@button_cross_controls = Sprite.new('sprites\button_crossed_controls.png',
+    width: 10 * @pixel_scaler,
+    height: 10 * @pixel_scaler,
+    x: 285 * @pixel_scaler,
+    y: 3 * @pixel_scaler,
+)
+@button_cross_controls.remove
+
+@button_array = [@button_play, @button_settings, @button_exit, @button_easy, @button_hard, @button_doom, @button_controls, @button_volume, @button_credits, @button_return, @button_cross_credits, @button_cross_controls, @button_soundon, @button_soundoff]
 
 @click = false
 
@@ -187,3 +203,5 @@
 @credits = false
 
 @volume = false
+
+@controls = false
