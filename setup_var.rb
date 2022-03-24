@@ -236,9 +236,6 @@
 @rounds_lost = 0 
 @round_active = 0
 
-
-
-
 #Player variables
 @left = 0
 @right = 0
@@ -335,7 +332,7 @@
 
 #music
 
-@shoot_sfx = Sound.new('music&sfx\shoot.wav')
+@shoot_sfx = Sound.new('music&sfx\shoot.mp3')
 @menu_theme = Music.new('music&sfx\track1.wav')
 @game_theme = Music.new('music&sfx\track2.wav')
 @music_tick = 0

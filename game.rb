@@ -34,6 +34,10 @@ on :key_held do |event|
             @gun_selected = 1
         when '2'
             @gun_selected = 2
+        when 't'
+            @gamemode = 1
+        when 'g'
+            @gamemode = 2
     end     
 end
 
@@ -176,6 +180,14 @@ update do
         end
         @game_theme.loop = true
 
+
+
+
+
+
+
+
+
         mousex = get :mouse_x
         mousey = get :mouse_y
         player_center_array = [(@player.x + @player.width/2), (@player.y + @player.height/2)] # Kan komma att ändras i och med att mittpunkten för sprites skiljer sig. 
@@ -227,6 +239,9 @@ update do
         @gamemode = 0
     elsif @gamemode == 2 #Bomb plant
         @gamemode_active = 2
+        @map.x = -130*@pixel_scaler
+        @map.y = -320*@pixel_scaler
+
         @gamemode = 0
     end
 
@@ -258,7 +273,7 @@ update do
 
         #difficulty multiplier
         
-        if @gamemode == 1 #Easy
+        if @difficulty == 1 #Easy
             i = 0
             @difficulty_multiplier[0] = 1
             @difficulty_multiplier[1] = 1
@@ -268,8 +283,8 @@ update do
                 i += 1
             end
             i = 0
-            @gamemode = 0
-        elsif @gamemode == 2 #Hard
+            @difficulty = 0
+        elsif @difficulty == 2 #Hard
             i = 0
             @difficulty_multiplier[0] = 3
             @difficulty_multiplier[1] = 6
@@ -279,18 +294,18 @@ update do
                 i += 1
             end
             i = 0
-            @gamemode = 0
-        elsif @gamemode == 3 #Doom
+            @difficulty = 0
+        elsif @difficulty == 3 #Doom
             i = 0
             @difficulty_multiplier[0] = 8
-            @difficulty_multiplier[1] = 30
+            @difficulty_multiplier[1] = 8
             while i < @enemyarray.length - 2
                 @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP
                 @shooting_speed = 1 * @difficulty_multiplier[1] #Shooting speed
                 i += 1
             end
             i = 0
-            @gamemode = 0
+            @difficulty = 0
         end
 
         # p "Shooting speed: #{@enemyarray[0][6]}"
@@ -420,21 +435,21 @@ update do
 
     #Bomb plant gamemode
 
-    if @gamemode_active = 2
+    if @gamemode_active == 2
         
-        if @round_start = 1
+        if @round_start == 1
             @bomb_timer = 60 * 30
             @time_left = 60 * 50
             @rounds_lost = 0
             @rounds_won = 0
-           @round_start = 0
+            @round_start = 0
         end
 
-        if @round_active = 1
+        if @round_active == 1
 
             @time_left -= 1
 
-            if @bomb_active = 1
+            if @bomb_active == 1
                 @bomb_timer -= 1
             end
 
@@ -458,11 +473,13 @@ update do
             p "Du vann!"
         end
 
+
     end
 
-  
         i = 0
         while i < @enemyarray.length
+            
+        if @gamemode_active == 1
             if @enemyarray[i][2] == 0
                 @enemyarray[i][3] = -180 * @pixel_scaler
                 @enemyarray[i][4] = -145 * @pixel_scaler
@@ -538,8 +555,13 @@ update do
                     @enemyarray[i][0].rotate += 360
                 end 
             end
-            
+        elsif @gamemode_active == 2
+
+        end
+
             @enemyarray[i][1] += @enemyarray[i][5]
+
+    
 
             enemy_rotate_angle = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[0]
             enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
@@ -590,6 +612,8 @@ update do
             i += 1
         end
         
+
+
         i = 0
         while i < @enemyarray.length
             xy_array = xy_translate(@enemyarray[i][3], @enemyarray[i][4], @map)
