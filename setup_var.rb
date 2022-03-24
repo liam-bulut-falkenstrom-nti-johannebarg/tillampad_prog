@@ -25,6 +25,14 @@
 )
 @gameover_text.remove
 
+@win_text = Sprite.new('sprites\youwin_text.png',
+    width: 300 * @pixel_scaler,
+    height: 180 * @pixel_scaler,
+    x: 0 * @pixel_scaler,
+    y: 0 * @pixel_scaler
+)
+@win_text.remove
+
 @wall_col1 = Sprite.new('sprites\hit_collision.png',
     width: 191 * @pixel_scaler,
     height: 158 * @pixel_scaler,
