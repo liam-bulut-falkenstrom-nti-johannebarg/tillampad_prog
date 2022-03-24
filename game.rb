@@ -5,7 +5,7 @@ require_relative "startup_setup.rb"
 
 set width: 300 * @pixel_scaler
 set height: 180 * @pixel_scaler
-set resizable: true
+set fullscreen: true
 
 on :key_held do |event|
     case event.key
@@ -71,7 +71,7 @@ on :mouse_down do |event|
 end
 
 on :key_down do |event|
-    if @gamestate == 2 && @death_timer > 30
+    if @gamestate == 2 || @gamestate == 3
         exit
     end
 end
@@ -96,9 +96,9 @@ update do
     if @gamestate == 0
         if @music_tick == 0
             @menu_theme.play
-            @menu_theme.loop = true
             @music_tick += 1
         end 
+
         mousex = get :mouse_x
         mousey = get :mouse_y
 
@@ -273,7 +273,6 @@ update do
         if @music_tick == 1
             @game_theme.play
             @game_theme.volume = 40
-            @game_theme.loop = true
             @music_tick += 1
         end
         @game_theme.loop = true
@@ -846,9 +845,21 @@ update do
         
         @health_bar.play animation: :"#{@health_bar_array[@health_index]}"
 
+        i = 0
+        @gamestate = 3
+        while i < @enemyarray.length     
+            if @enemyarray[i][7] != 0
+                @gamestate = 1
+            end
+            i += 1
+        end
+
         if @health_index == 10
             @gamestate = 2
         end
+
+        
+        
         #Här är debugging kod -----------------------------------------------------------------------------------------------------------------------
         @text.remove
         @text = Text.new(
@@ -872,8 +883,20 @@ update do
             @gameover_text.z = @fadeout.z + 1
         end
         @death_timer += 1 
+
+    elsif @gamestate == 3
+        @fadeout.add
+        @fadeout.z = 999
+        @player.z = @fadeout.z + 1
+        if @death_timer == 60
+            @win_text.add
+            @win_text.z = @fadeout.z + 1
+        end
+        @death_timer += 1 
     
     end
+    
+    
 end
 
 show
