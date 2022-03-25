@@ -99,6 +99,14 @@ update do
             @music_tick += 1
         end 
 
+        if @mute == true && @mute_active == 0
+            @menu_theme.pause
+            @mute_active = 1
+        elsif @mute == false && @mute_active == 1
+            @menu_theme.play
+            @mute_active = 0
+        end
+
         mousex = get :mouse_x
         mousey = get :mouse_y
 
@@ -170,7 +178,7 @@ update do
                         @main_menu = false
                         @controls = false
                         @volume = false
-                    elsif i == 9 && @play == false && @main_menu == false && @credits == false && @settings == true || @volume == true
+                    elsif i == 9 && @play == false && @main_menu == false && @credits == false && @volume == false && @settings == true 
                         @main_menu = true
                         i = @button_array.length
                         @play = false
@@ -178,7 +186,15 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 10 && @play == false && @main_menu == false && @settings == false && @controls == false && @credits == true
+                    elsif i == 10 && @play == false && @main_menu == false && @credits == false && @settings == false && @volume == true
+                        @settings = true
+                        i = @button_array.length
+                        @play = false
+                        @credits = false
+                        @volume = false
+                        @controls = false
+                        @main_menu = false
+                    elsif i == 11 && @play == false && @main_menu == false && @settings == false && @controls == false && @credits == true
                         @settings = true
                         i = @button_array.length
                         @play = false
@@ -186,7 +202,7 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 11 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == true
+                    elsif i == 12 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == true
                         @settings = true
                         i = @button_array.length
                         @play = false
@@ -194,12 +210,12 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 12 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == false && @volume == true
-                        i = @button_array.length
-                        # Ha på musik
                     elsif i == 13 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == false && @volume == true
                         i = @button_array.length
-                        # stäng av musik
+                        @mute = false
+                    elsif i == 14 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == false && @volume == true
+                        i = @button_array.length
+                        @mute = true
                     end
                 end
             else
@@ -212,6 +228,8 @@ update do
             @button_play.add
             @button_settings.add
             @button_exit.add
+            @button_return_settings.remove
+            @button_return_volume.remove
             @hud_credits.remove
             @button_easy.remove
             @button_hard.remove
@@ -219,7 +237,6 @@ update do
             @button_controls.remove
             @button_volume.remove
             @button_credits.remove
-            @button_return.remove
             @button_cross_credits.remove
             @button_cross_controls.remove
             @button_soundon.remove
@@ -229,7 +246,8 @@ update do
             @button_controls.add
             @button_volume.add
             @button_credits.add
-            @button_return.add
+            @button_return_settings.add
+            @button_return_volume.remove
             @hud_credits.remove
             @button_easy.remove
             @button_hard.remove
@@ -246,11 +264,12 @@ update do
             @button_easy.add
             @button_hard.add
             @button_doom.add
+            @button_return_volume.remove
+            @button_return_settings.remove
             @hud_credits.remove
             @button_controls.remove
             @button_volume.remove
             @button_credits.remove
-            @button_return.remove
             @button_play.remove
             @button_settings.remove
             @button_exit.remove
@@ -262,10 +281,11 @@ update do
         elsif @controls == true
             @hud_controls.add
             @button_cross_controls.add
+            @button_return_volume.remove
+            @button_return_settings.remove
             @button_cross_credits.remove
             @button_soundon.remove
             @button_soundoff.remove
-            @button_return.remove
             @hud_credits.remove
             @button_easy.remove
             @button_hard.remove
@@ -280,13 +300,14 @@ update do
             @hud_credits.add
             @button_cross_credits.add
             @button_cross_controls.remove
+            @button_return_volume.remove
+            @button_return_settings.remove
             @button_easy.remove
             @button_hard.remove
             @button_doom.remove
             @button_controls.remove
             @button_volume.remove
             @button_credits.remove
-            @button_return.remove
             @button_play.remove
             @button_settings.remove
             @button_exit.remove
@@ -296,7 +317,8 @@ update do
         elsif @volume == true
             @button_soundon.add
             @button_soundoff.add
-            @button_return.add
+            @button_return_volume.add
+            @button_return_settings.remove
             @button_cross_credits.remove
             @button_cross_controls
             @hud_credits.remove
@@ -320,8 +342,10 @@ update do
             i += 1
         end
         if @music_tick == 1
-            @game_theme.play
-            @game_theme.volume = 40
+            if @mute != true
+                @game_theme.play
+                @game_theme.volume = 40
+            end
             @music_tick += 1
         end
         @game_theme.loop = true

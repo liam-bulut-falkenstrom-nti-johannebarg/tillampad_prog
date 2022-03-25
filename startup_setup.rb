@@ -130,7 +130,7 @@
 )
 @button_credits.remove
 
-@button_return = Sprite.new('sprites\button_return_combine.png',
+@button_return_settings = Sprite.new('sprites\button_return_combine_settings.png',
     clip_width: 36,
     width: 65 * @pixel_scaler,
     height: 20 * @pixel_scaler,
@@ -142,7 +142,22 @@
         hover: 1..1,
     }
 )
-@button_return.remove
+@button_return_settings.remove
+
+@button_return_volume = Sprite.new('sprites\button_return_combine_volume.png',
+    clip_width: 36,
+    width: 65 * @pixel_scaler,
+    height: 20 * @pixel_scaler,
+    x: 60 * @pixel_scaler,
+    y: 120 * @pixel_scaler,
+    loop: true,
+    animations: {
+        normal: 0..0,
+        hover: 1..1,
+    }
+)
+@button_return_volume.remove
+
 
 @button_soundon = Sprite.new('sprites\button_soundsymbol.png',
     width: 20 * @pixel_scaler,
@@ -192,7 +207,7 @@
 )
 @button_cross_controls.remove
 
-@button_array = [@button_play, @button_settings, @button_exit, @button_easy, @button_hard, @button_doom, @button_controls, @button_volume, @button_credits, @button_return, @button_cross_credits, @button_cross_controls, @button_soundon, @button_soundoff]
+@button_array = [@button_play, @button_settings, @button_exit, @button_easy, @button_hard, @button_doom, @button_controls, @button_volume, @button_credits, @button_return_settings, @button_return_volume, @button_cross_credits, @button_cross_controls, @button_soundon, @button_soundoff]
 
 @click = false
 
@@ -205,3 +220,7 @@
 @volume = false
 
 @controls = false
+
+@mute = false
+
+@mute_active = 0
