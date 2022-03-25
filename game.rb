@@ -18,7 +18,7 @@ on :key_held do |event|
         when 's'
             @down = 1
         when 'r'
-            if @gun_selected == 1 && @ammo_total_pistol >= 30
+            if @gun_selected == 1 && @ammo_total_pistol >= 13
                 @reload = 1
             elsif @gun_selected == 2 && @ammo_total_ak >= 30
                 @reload = 1
@@ -79,9 +79,9 @@ end
 on :mouse_up do |event|
     case event.button
     when :left
-    if @ak_shooting_on == 1
-        @ak_shooting_on = 0
-    end
+        if @ak_shooting_on == 1
+            @ak_shooting_on = 0
+        end
     when :middle
 
     when :right
@@ -394,17 +394,7 @@ update do
             @shooting = false
         end
 
-    #Gamemode setting
-
-    if @gamemode == 1 #Arcade
-        @gamemode_active = 1
-        @gamemode = 0
-    elsif @gamemode == 2 #Bomb plant
-        @gamemode_active = 2
-        @gamemode = 0
-    end
-
-    #difficulty multiplier
+    #reaload
     
         if @reload == 1
             @reload_time += 1
@@ -426,6 +416,7 @@ update do
         if @ammo_mag_ak > 0 && @gun_selected == 2 && @ak_frame_counter <= 0 && @ak_shooting_on == 1
             @shoot_sfx.play
             @ak_frame_counter = 5
+            @shooting = true
         elsif @ammo_mag_ak > 0 && @gun_selected == 2 && @ak_frame_counter != 0 && @ak_shooting_on == 1
             @ak_frame_counter -= 1
         end
@@ -436,7 +427,7 @@ update do
             i = 0
             @difficulty_multiplier[0] = 1
             @difficulty_multiplier[1] = 1
-            while i < @enemyarray.length - 2
+            while i < @enemyarray.length
                 @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP 
                 @shooting_speed = 1 * @difficulty_multiplier[1] #Shooting speed
                 i += 1
@@ -447,7 +438,7 @@ update do
             i = 0
             @difficulty_multiplier[0] = 3
             @difficulty_multiplier[1] = 6
-            while i < @enemyarray.length - 2
+            while i < @enemyarray.length
                 @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP
                 @shooting_speed = 1 * @difficulty_multiplier[1] #Shooting speed
                 i += 1
@@ -458,7 +449,7 @@ update do
             i = 0
             @difficulty_multiplier[0] = 8
             @difficulty_multiplier[1] = 30
-            while i < @enemyarray.length - 2
+            while i < @enemyarray.length
                 @enemyarray[i][7] = 100 * @difficulty_multiplier[0] #HP
                 @shooting_speed = 1 * @difficulty_multiplier[1] #Shooting speed
                 i += 1
@@ -559,26 +550,8 @@ update do
 
         @player.rotate = rotate_angle
 
-        # x_dir postivt = höger, negativt = vänster
-        # y_dir postivt = ner, negativt = upp
-        
-        # if (@player.x + @player.width/2 > 100 * @pixel_scaler || dist_array[0] < 0) && (@player.x + @player.width/2 < 200 * @pixel_scaler || dist_array[0] > 0)
-        #     @map.x += -dist_array[0]/80
-        # end
-        # if (@player.y + @player.height/2 > 50 * @pixel_scaler || dist_array[1] < 0) && (@player.y + @player.height/2 < 130 * @pixel_scaler ||  dist_array[1] > 0)
-        #     @map.y += -dist_array[1]/80
-        # end
-
-        # @player_x += @x_dir * @walk_speed
-        # @player_y += @y_dir * @walk_speed # TYP SCREEN MOVEMENT MEN JAG FATTAR INTE OLIVERS KOD
-
         @map.x -= @x_dir * @walk_speed
         @map.y -= @y_dir * @walk_speed
-
-        # xy_array = xy_translate(@player_x, @player_y, @map)
-        # @player.x = xy_array[0]
-        # @player.y = xy_array[1]
-
         
         j += 1
         while j > 20
@@ -590,50 +563,6 @@ update do
             end
             j = 0
         end
-        i = 0
-
-    #Bomb plant gamemode
-
-    if @gamemode_active == 2
-        
-        if @round_start == 1
-            @bomb_timer = 60 * 30
-            @time_left = 60 * 50
-            @rounds_lost = 0
-            @rounds_won = 0
-           @round_start = 0
-        end
-
-        if @round_active == 1
-
-            @time_left -= 1
-
-            if @bomb_active == 1
-                @bomb_timer -= 1
-            end
-
-            if @bomb_timer <= 0
-                @rounds_won += 1
-                @round_active = 0
-            end
-
-            if @round_timer <= 0
-                @rounds_lost += 1
-                @round_active = 0
-            end
-
-        end
-
-        if @rounds_won >= 8
-            @gamemode_active = 0
-            p "Du vann!"
-        elsif @rounds_lost >= 8
-            @gamemode_active = 0
-            p "Du vann!"
-        end
-
-    end
-
   
         i = 0
         while i < @enemyarray.length
@@ -934,14 +863,80 @@ update do
         
         
         #Här är debugging kod -----------------------------------------------------------------------------------------------------------------------
-        @text.remove
-        @text = Text.new(
-            "#{(get :fps).to_i} #{rotate_angle.to_i} #{@ammo_mag_ak}/#{@ammo_total_ak} #{@ammo_mag_pistol}/#{@ammo_total_pistol} ",
-            x: 20, y: 20,
+        # @text.remove
+        # @text = Text.new(
+        #     "#{(get :fps).to_i} #{rotate_angle.to_i} #{@ammo_mag_ak}/#{@ammo_total_ak} #{@ammo_mag_pistol}/#{@ammo_total_pistol} ",
+        #     x: 20, y: 20,
+        #     style: 'bold',
+        #     size: 40,
+        #     color: 'blue',
+        # )
+
+        @text_ammo_mag_pistol.remove
+        if @gun_selected == 1
+        @text_ammo_mag_pistol = Text.new(
+            "#{@ammo_mag_pistol}",
+            x: 269 * @pixel_scaler, y: 161 * @pixel_scaler,
+            font: 'misc/PressStart2P-Regular.ttf',
             style: 'bold',
-            size: 40,
-            color: 'blue',
+            size: 34,
+            color: 'black',
         )
+        end
+
+        @text_ammo_total_pistol.remove
+        if @gun_selected == 1
+        @text_ammo_total_pistol = Text.new(
+            "#{@ammo_total_pistol}",
+            x: 284 * @pixel_scaler, y: 169 * @pixel_scaler,
+            font: 'misc/PressStart2P-Regular.ttf',
+            style: 'bold',
+            size: 34,
+            color: 'black',
+        )
+        end
+
+        @text_ammo_mag_ak.remove
+        if @gun_selected == 2
+        @text_ammo_mag_ak = Text.new(
+            "#{@ammo_mag_ak}",
+            x: 269 * @pixel_scaler, y: 161 * @pixel_scaler,
+            font: 'misc/PressStart2P-Regular.ttf',
+            style: 'bold',
+            size: 34,
+            color: 'black',
+        )
+        end
+
+        @text_ammo_total_ak.remove
+        if @gun_selected == 2 && @ammo_total_ak < 100
+        @text_ammo_total_ak = Text.new(
+            "#{@ammo_total_ak}",
+            x: 284 * @pixel_scaler, y: 169 * @pixel_scaler,
+            font: 'misc/PressStart2P-Regular.ttf',
+            style: 'bold',
+            size: 34,
+            color: 'black',
+        )
+        elsif @gun_selected == 2 && @ammo_total_ak >= 100
+        @text_ammo_total_ak = Text.new(
+            "#{@ammo_total_ak}",
+            x: 282 * @pixel_scaler, y: 170 * @pixel_scaler,
+            font: 'misc/PressStart2P-Regular.ttf',
+            style: 'bold',
+            size: 26,
+            color: 'black',
+        )
+        end
+
+        if @gun_selected == 1
+        @pistol_siluette.add
+        @ak_siluette.remove
+        elsif @gun_selected == 2
+        @pistol_siluette.remove
+        @ak_siluette.add
+        end
+
     elsif @gamestate == 2
         @fadeout.add
         @fadeout.z = 999
