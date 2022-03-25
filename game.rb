@@ -320,7 +320,7 @@ update do
             @button_return_volume.add
             @button_return_settings.remove
             @button_cross_credits.remove
-            @button_cross_controls
+            @button_cross_controls.remove
             @hud_credits.remove
             @button_easy.remove
             @button_hard.remove
