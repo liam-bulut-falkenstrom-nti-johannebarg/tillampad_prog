@@ -111,7 +111,7 @@ update do
             if hover(mousex, mousey, @button_array[i])
                 @button_array[i].play animation: :hover
                 if @click
-                    if i == 0 && @play == false && @settings == false && @credits == false && @main_menu == true
+                    if i == 0 && @main_menu == true
                         @play = true
                         i = @button_array.length
                         @main_menu = false
@@ -119,7 +119,7 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 1 && @settings == false && @play == false && @credits == false && @main_menu == true
+                    elsif i == 1 && @main_menu == true
                         @settings = true
                         i = @button_array.length
                         @main_menu = false
@@ -127,7 +127,7 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 2 && @settings == false && @play == false && @credits == false && @main_menu == true
+                    elsif i == 2 && @main_menu == true
                         exit
                     elsif i == 3 && @play == true
                         @gamemode = 1
@@ -141,7 +141,7 @@ update do
                         @gamemode = 3
                         @gamestate = 1
                         i = @button_array.length
-                    elsif i == 6 && @play == false && @main_menu == false && @credits == false && @settings == true
+                    elsif i == 6 && @settings == true
                         @controls = true
                         i = @button_array.length
                         @credits = false
@@ -149,7 +149,7 @@ update do
                         @play = false
                         @main_menu = false
                         @volume = false
-                    elsif i == 7 && @play == false && @main_menu == false && @credits == false && @settings == true
+                    elsif i == 7 && @settings == true
                         @volume = true
                         i = @button_array.length
                         @credits = false
@@ -157,7 +157,7 @@ update do
                         @play = false
                         @main_menu = false
                         @controls = false
-                    elsif i == 8 && @play == false && @main_menu == false && @credits == false && @settings == true
+                    elsif i == 8 && @settings == true
                         @credits = true
                         i = @button_array.length
                         @settings = false
@@ -165,7 +165,7 @@ update do
                         @main_menu = false
                         @controls = false
                         @volume = false
-                    elsif i == 9 && @play == false && @main_menu == false && @credits == false && @volume == false && @settings == true 
+                    elsif i == 9 && @settings == true 
                         @main_menu = true
                         i = @button_array.length
                         @play = false
@@ -173,7 +173,7 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 10 && @play == false && @main_menu == false && @credits == false && @settings == false && @volume == true
+                    elsif i == 10 && @volume == true
                         @settings = true
                         i = @button_array.length
                         @play = false
@@ -181,7 +181,7 @@ update do
                         @volume = false
                         @controls = false
                         @main_menu = false
-                    elsif i == 11 && @play == false && @main_menu == false && @settings == false && @controls == false && @credits == true
+                    elsif i == 11 && @credits == true
                         @settings = true
                         i = @button_array.length
                         @play = false
@@ -189,7 +189,7 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 12 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == true
+                    elsif i == 12 && @controls == true
                         @settings = true
                         i = @button_array.length
                         @play = false
@@ -197,10 +197,10 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 13 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == false && @volume == true
+                    elsif i == 13 && @volume == true
                         i = @button_array.length
                         @mute = false
-                    elsif i == 14 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == false && @volume == true
+                    elsif i == 14 && @volume == true
                         i = @button_array.length
                         @mute = true
                     end
@@ -307,7 +307,7 @@ update do
             @button_return_volume.add
             @button_return_settings.remove
             @button_cross_credits.remove
-            @button_cross_controls
+            @button_cross_controls.remove
             @hud_credits.remove
             @button_easy.remove
             @button_hard.remove
