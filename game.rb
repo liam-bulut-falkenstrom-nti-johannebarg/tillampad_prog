@@ -71,7 +71,7 @@ on :mouse_down do |event|
 end
 
 on :key_down do |event|
-    if @gamestate == 2 || @gamestate == 3
+    if @gamestate == 2 || @gamestate == 3 && @death_timer > 30
         exit
     end
 end
