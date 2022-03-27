@@ -1,7 +1,7 @@
 #Map var
 @pixel_scaler = 5
 
-#Background
+#Background / HUD
 @map = Sprite.new('sprites\map_main.png',
     width: 500 * @pixel_scaler,
     height: 600 * @pixel_scaler,
@@ -136,7 +136,7 @@
     y: 5000 * @pixel_scaler
 )
 
-#Sprites
+#Player / Enemy related Sprites
 @player = Sprite.new('sprites\player_sprite.png',
     clip_width: 25,
     width: 25 * (@pixel_scaler-1),
@@ -192,6 +192,7 @@
 )
 
 #Från vänster til höger:sprite, walk dist, vilken rail, relativ x, relativ y, går fram eller tillbak, shoot tick, health, direction
+# Hade varit bättre med dictionaries här för tydligare kod
 @enemyarray = [
     [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 1, 0, 0, 1, 80, 100, 0],
     [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 2, 0, 0, 1, 80, 100, 0],

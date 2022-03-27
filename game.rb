@@ -23,12 +23,6 @@ on :key_held do |event|
             elsif @gun_selected == 2 && @ammo_total_ak >= 30
                 @reload = 1
             end
-        when '8'
-            @difficulty = 1
-        when '9'
-            @difficulty = 2
-        when '0'
-            @difficulty = 3
         when '1'
             @gun_selected = 1
         when '2'
@@ -110,21 +104,14 @@ update do
         mousex = get :mouse_x
         mousey = get :mouse_y
 
-        def hover(musx, musy, button)
-            if musx > button.x && musx < button.x + button.width
-                if musy > button.y && musy < button.y + button.height
-                    return true
-                end
-                return false
-            end
-        end
+        
         
         i = 0
         while i < @button_array.length
             if hover(mousex, mousey, @button_array[i])
                 @button_array[i].play animation: :hover
                 if @click
-                    if i == 0 && @play == false && @settings == false && @credits == false && @main_menu == true
+                    if i == 0 && @main_menu == true
                         @play = true
                         i = @button_array.length
                         @main_menu = false
@@ -132,7 +119,7 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 1 && @settings == false && @play == false && @credits == false && @main_menu == true
+                    elsif i == 1 && @main_menu == true
                         @settings = true
                         i = @button_array.length
                         @main_menu = false
@@ -140,7 +127,7 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 2 && @settings == false && @play == false && @credits == false && @main_menu == true
+                    elsif i == 2 && @main_menu == true
                         exit
                     elsif i == 3 && @play == true
                         @gamemode = 1
@@ -154,7 +141,7 @@ update do
                         @gamemode = 3
                         @gamestate = 1
                         i = @button_array.length
-                    elsif i == 6 && @play == false && @main_menu == false && @credits == false && @settings == true
+                    elsif i == 6 && @settings == true
                         @controls = true
                         i = @button_array.length
                         @credits = false
@@ -162,7 +149,7 @@ update do
                         @play = false
                         @main_menu = false
                         @volume = false
-                    elsif i == 7 && @play == false && @main_menu == false && @credits == false && @settings == true
+                    elsif i == 7 && @settings == true
                         @volume = true
                         i = @button_array.length
                         @credits = false
@@ -170,7 +157,7 @@ update do
                         @play = false
                         @main_menu = false
                         @controls = false
-                    elsif i == 8 && @play == false && @main_menu == false && @credits == false && @settings == true
+                    elsif i == 8 && @settings == true
                         @credits = true
                         i = @button_array.length
                         @settings = false
@@ -178,7 +165,7 @@ update do
                         @main_menu = false
                         @controls = false
                         @volume = false
-                    elsif i == 9 && @play == false && @main_menu == false && @credits == false && @volume == false && @settings == true 
+                    elsif i == 9 && @settings == true 
                         @main_menu = true
                         i = @button_array.length
                         @play = false
@@ -186,7 +173,7 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 10 && @play == false && @main_menu == false && @credits == false && @settings == false && @volume == true
+                    elsif i == 10 && @volume == true
                         @settings = true
                         i = @button_array.length
                         @play = false
@@ -194,7 +181,7 @@ update do
                         @volume = false
                         @controls = false
                         @main_menu = false
-                    elsif i == 11 && @play == false && @main_menu == false && @settings == false && @controls == false && @credits == true
+                    elsif i == 11 && @credits == true
                         @settings = true
                         i = @button_array.length
                         @play = false
@@ -202,7 +189,7 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 12 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == true
+                    elsif i == 12 && @controls == true
                         @settings = true
                         i = @button_array.length
                         @play = false
@@ -210,10 +197,10 @@ update do
                         @credits = false
                         @volume = false
                         @controls = false
-                    elsif i == 13 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == false && @volume == true
+                    elsif i == 13 && @volume == true
                         i = @button_array.length
                         @mute = false
-                    elsif i == 14 && @play == false && @main_menu == false && @settings == false && @credits == false && @controls == false && @volume == true
+                    elsif i == 14 && @volume == true
                         i = @button_array.length
                         @mute = true
                     end
@@ -320,7 +307,7 @@ update do
             @button_return_volume.add
             @button_return_settings.remove
             @button_cross_credits.remove
-            @button_cross_controls
+            @button_cross_controls.remove
             @hud_credits.remove
             @button_easy.remove
             @button_hard.remove
@@ -350,6 +337,8 @@ update do
         end
         @game_theme.loop = true
 
+        # Shooting --------------------------------------------------------
+
         mousex = get :mouse_x
         mousey = get :mouse_y
         player_center_array = [(@player.x + @player.width/2), (@player.y + @player.height/2)] # Kan komma att ändras i och med att mittpunkten för sprites skiljer sig. 
@@ -363,7 +352,7 @@ update do
             @x_dir = (@right - @left) 
             @y_dir = (@down - @up)
         end 
-        
+
         if @shooting
             i = 0
             while i < @bullet_array.length  
@@ -383,18 +372,15 @@ update do
                     i = @bullet_array.length
                     @player.play animation: :shoot
                     @shoot_sfx.play
-
-                    # @bullet_hitbox_array[i].x = @bullet_array[i][0].x
-                    # @bullet_hitbox_array[i].y = @bullet_array[i][0].y
-                    # @bullet_hitbox_array[i].rotate = @bullet_array[i][0].rotate
-
                 end
                 i += 1
             end
             @shooting = false
         end
 
-    #reaload
+        @player.rotate = rotate_angle
+
+        #reaload ----------------------------------------------------
     
         if @reload == 1
             @reload_time += 1
@@ -421,7 +407,7 @@ update do
             @ak_frame_counter -= 1
         end
 
-        #difficulty multiplier
+        #difficulty multiplier ---------------------------------------------------
         
         if @gamemode == 1 #Easy
             i = 0
@@ -458,7 +444,7 @@ update do
             @gamemode = 0
         end
 
-        #Hit collison Enviorment
+        #Hit Collison Environment A.K.A HCE ---------------------------
 
         if @right == 1 
             if @on_r == 0
@@ -544,12 +530,6 @@ update do
             hitbox_update_characters += 1
         end
 
-
-        @player.rotate = rotate_angle
-
-        @map.x -= @x_dir * @walk_speed
-        @map.y -= @y_dir * @walk_speed
-        
         j += 1
         while j > 20
             if @x_dir == 0 && @y_dir == 0 && @right == 0 && @left == 0 && @up == 0 && @down == 0
@@ -560,9 +540,19 @@ update do
             end
             j = 0
         end
-  
+
+
+        # Player movement --------------------------------------------------
+
+        @map.x -= @x_dir * @walk_speed # Flyttar map spriten istället för kamera då Ruby2D saknar kamera funktionalitet.
+        @map.y -= @y_dir * @walk_speed # Finns ingen kamera variabel som kan anropas 
+        
+
+
+        # Enemy AI -------------------------------------------------------
+
         i = 0
-        while i < @enemyarray.length
+        while i < @enemyarray.length # Referera till setup_var.rb Används för att effektivt kunna anropa alla/specifik enemy sprite. mha while-loop
             if @enemyarray[i][2] == 0
                 @enemyarray[i][3] = -180 * @pixel_scaler
                 @enemyarray[i][4] = -145 * @pixel_scaler
@@ -699,6 +689,8 @@ update do
             i += 1
         end
 
+        # Enemy projectiles / hit reg -----------------------------
+
         i = 0
         while i < @enemy_bullet_array.length
             @enemy_bullet_array[i][3] += @enemy_bullet_array[i][1] * @bullet_speed
@@ -730,6 +722,8 @@ update do
             end
         end
 
+        # Player projectiles --------------------- 
+
         i = 0
         while i < @bullet_array.length
             if @bullet_array[i][1] == true
@@ -750,7 +744,7 @@ update do
                             @bullet_array[i][0].remove
                             @enemyarray[j][7] -= 50
                             if @enemyarray[j][7] == 0
-                                @enemy_death_array << [
+                                @enemy_death_array << [ #Skapar nya sprites istället för att använda redan definierade sprites.
                                     Sprite.new('sprites\enemy_death.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 0, y: 0, loop: false, time: 100, rotate: @enemyarray[j][0].rotate),
                                     @enemyarray[j][3],
                                     @enemyarray[j][4],
@@ -781,6 +775,8 @@ update do
             i += 1
         end
 
+        # Enemy death animation -------------------------
+
         i = 0
         while i < @enemy_death_array.length
             xy_array = xy_translate(@enemy_death_array[i][1], @enemy_death_array[i][2], @map)
@@ -804,6 +800,7 @@ update do
             i += 1
         end
 
+        # XY relative / wall placement -----------------------------------
 
         i = 0
         while i < @wall_array.length
@@ -813,19 +810,8 @@ update do
             i += 1
         end
 
-        @submap.x = @map.x
-        @submap.y = @map.y
+        # Player damage animation + healthbar animation -------------------------------------
 
-
-        # if collision(@submap_col, @player) == true
-        #     if @submap.opacity > 0
-        #         @submap.opacity -= 0.1
-        #     end
-        # else
-        #     if @submap.opacity < 1
-        #         @submap.opacity += 0.1
-        #     end
-        # end
         if @damaged
             if @damaged_timer%1 == 0
                 if @damaged_timer%2 == 0
@@ -844,6 +830,8 @@ update do
         
         @health_bar.play animation: :"#{@health_bar_array[@health_index]}"
 
+        # gamestate ---------------------------------------------
+
         i = 0
         @gamestate = 3
         while i < @enemyarray.length     
@@ -859,7 +847,7 @@ update do
 
         
         
-        #Här är debugging kod -----------------------------------------------------------------------------------------------------------------------
+        #debugging kod -----------------------------------------------------------------------------------------------------------------------
         # @text.remove
         # @text = Text.new(
         #     "#{(get :fps).to_i} #{rotate_angle.to_i} #{@ammo_mag_ak}/#{@ammo_total_ak} #{@ammo_mag_pistol}/#{@ammo_total_pistol} ",
@@ -869,16 +857,18 @@ update do
         #     color: 'blue',
         # )
 
+        # Ammo HUD -------------------------------------------------------------------
+
         @text_ammo_mag_pistol.remove
         if @gun_selected == 1
-        @text_ammo_mag_pistol = Text.new(
-            "#{@ammo_mag_pistol}",
-            x: 269 * @pixel_scaler, y: 161 * @pixel_scaler,
-            font: 'misc/PressStart2P-Regular.ttf',
-            style: 'bold',
-            size: 34,
-            color: 'black',
-        )
+            @text_ammo_mag_pistol = Text.new(
+                "#{@ammo_mag_pistol}",
+                x: 269 * @pixel_scaler, y: 161 * @pixel_scaler,
+                font: 'misc/PressStart2P-Regular.ttf',
+                style: 'bold',
+                size: 34,
+                color: 'black',
+            )
         end
 
         @text_ammo_total_pistol.remove
@@ -895,26 +885,26 @@ update do
 
         @text_ammo_mag_ak.remove
         if @gun_selected == 2
-        @text_ammo_mag_ak = Text.new(
-            "#{@ammo_mag_ak}",
-            x: 269 * @pixel_scaler, y: 161 * @pixel_scaler,
-            font: 'misc/PressStart2P-Regular.ttf',
-            style: 'bold',
-            size: 34,
-            color: 'black',
-        )
+            @text_ammo_mag_ak = Text.new(
+                "#{@ammo_mag_ak}",
+                x: 269 * @pixel_scaler, y: 161 * @pixel_scaler,
+                font: 'misc/PressStart2P-Regular.ttf',
+                style: 'bold',
+                size: 34,
+                color: 'black',
+            )
         end
 
         @text_ammo_total_ak.remove
         if @gun_selected == 2 && @ammo_total_ak < 100
-        @text_ammo_total_ak = Text.new(
-            "#{@ammo_total_ak}",
-            x: 284 * @pixel_scaler, y: 169 * @pixel_scaler,
-            font: 'misc/PressStart2P-Regular.ttf',
-            style: 'bold',
-            size: 34,
-            color: 'black',
-        )
+            @text_ammo_total_ak = Text.new(
+                "#{@ammo_total_ak}",
+                x: 284 * @pixel_scaler, y: 169 * @pixel_scaler,
+                font: 'misc/PressStart2P-Regular.ttf',
+                style: 'bold',
+                size: 34,
+                color: 'black',
+            )
         elsif @gun_selected == 2 && @ammo_total_ak >= 100
         @text_ammo_total_ak = Text.new(
             "#{@ammo_total_ak}",
@@ -927,12 +917,15 @@ update do
         end
 
         if @gun_selected == 1
-        @pistol_siluette.add
-        @ak_siluette.remove
+            @pistol_siluette.add
+            @ak_siluette.remove
         elsif @gun_selected == 2
-        @pistol_siluette.remove
-        @ak_siluette.add
+            @pistol_siluette.remove
+            @ak_siluette.add
         end
+
+
+        # WIN and LOSE ------------------------------------------
 
     elsif @gamestate == 2
         @fadeout.add
