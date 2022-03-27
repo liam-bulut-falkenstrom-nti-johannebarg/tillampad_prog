@@ -3,14 +3,18 @@ require_relative "setup_var.rb"
 require_relative "help_functions.rb"
 require_relative "startup_setup.rb"
 
+#Window -------------------------- Liam
+
 set width: 300 * @pixel_scaler
 set height: 180 * @pixel_scaler
 set fullscreen: true
 
+#controls -------------------------- Liam
+
 on :key_held do |event|
     case event.key
         when 'd'
-            @right = 1
+            @right = 1 # Detta för att ruby2d inte kan registrera två inputs samtidigt
         when 'a'
             @left = 1
         when 'w'
@@ -65,7 +69,7 @@ on :mouse_down do |event|
 end
 
 on :key_down do |event|
-    if @gamestate == 2 || @gamestate == 3 && @death_timer > 30
+    if @gamestate == 2 || @gamestate == 3 && @death_timer > 30 # Gamestate bestämmer ifall spelaren kör spelet, har förlorat eller vunnit
         exit
     end
 end
@@ -86,8 +90,11 @@ end
 i = 0
 j = 0
 
-update do
+update do # Fungerar som en while-loop som loopar för varje frame (60fps). Här finns majoriteten av koden
     if @gamestate == 0
+
+        # Music -------------------------------------------------- Erik
+
         if @music_tick == 0
             @menu_theme.play
             @music_tick += 1
@@ -101,11 +108,11 @@ update do
             @mute_active = 0
         end
 
-        mousex = get :mouse_x
+        # Menu ----------------------------------------------------- Pontus
+        
+        mousex = get :mouse_x # Hämtar muspekarens y och x koordinater relativt till fönstret
         mousey = get :mouse_y
 
-        
-        
         i = 0
         while i < @button_array.length
             if hover(mousex, mousey, @button_array[i])
@@ -337,11 +344,11 @@ update do
         end
         @game_theme.loop = true
 
-        # Shooting --------------------------------------------------------
+        # Shooting -------------------------------------------------------- Oliver
 
         mousex = get :mouse_x
         mousey = get :mouse_y
-        player_center_array = [(@player.x + @player.width/2), (@player.y + @player.height/2)] # Kan komma att ändras i och med att mittpunkten för sprites skiljer sig. 
+        player_center_array = [(@player.x + @player.width/2), (@player.y + @player.height/2)] # Mittpunkten på spelar karaktärens sprite
         rotate_angle = mouse_angle(mousex, mousey, player_center_array)[0]
         unit_vector = mouse_angle(mousex, mousey, player_center_array)[1]
         dist_array = mouse_angle(mousex, mousey, [150.137*@pixel_scaler, 90.137*@pixel_scaler])[2] #float för att undvika zero division
@@ -380,7 +387,7 @@ update do
 
         @player.rotate = rotate_angle
 
-        #reaload ----------------------------------------------------
+        #reload ---------------------------------------------------- Oliver
     
         if @reload == 1
             @reload_time += 1
@@ -407,7 +414,7 @@ update do
             @ak_frame_counter -= 1
         end
 
-        #difficulty multiplier ---------------------------------------------------
+        #difficulty multiplier --------------------------------------------------- Oliver
         
         if @gamemode == 1 #Easy
             i = 0
@@ -444,7 +451,7 @@ update do
             @gamemode = 0
         end
 
-        #Hit Collison Environment A.K.A HCE ---------------------------
+        #Hit Collison Environment A.K.A HCE --------------------------- Oliver
 
         if @right == 1 
             if @on_r == 0
@@ -489,7 +496,7 @@ update do
         hitbox_update_characters = 0
         hitbox_update_collision_boxes = 0
         while hitbox_update_characters < @characters_array.length
-            while hitbox_update_collision_boxes < @wall_array.length - 1
+            while hitbox_update_collision_boxes < @wall_array.length - 1 # Kolla setup för static collision
                 if collision(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0]) == true
                     @correction_x = collision_dir_x(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @x_dir, @y_dir)
                     @correction_y = collision_dir_y(@characters_array[hitbox_update_characters], @wall_array[hitbox_update_collision_boxes][0], @y_dir, @x_dir)
@@ -542,17 +549,17 @@ update do
         end
 
 
-        # Player movement --------------------------------------------------
+        # Player movement -------------------------------------------------- Liam
 
         @map.x -= @x_dir * @walk_speed # Flyttar map spriten istället för kamera då Ruby2D saknar kamera funktionalitet.
         @map.y -= @y_dir * @walk_speed # Finns ingen kamera variabel som kan anropas 
         
 
 
-        # Enemy AI -------------------------------------------------------
+        # Enemy AI ------------------------------------------------------- Liam
 
         i = 0
-        while i < @enemyarray.length # Referera till setup_var.rb Används för att effektivt kunna anropa alla/specifik enemy sprite. mha while-loop
+        while i < @enemyarray.length # Referera till setup_var.rb. Används för att effektivt kunna anropa alla/specifik enemy sprite mha while-loop
             if @enemyarray[i][2] == 0
                 @enemyarray[i][3] = -180 * @pixel_scaler
                 @enemyarray[i][4] = -145 * @pixel_scaler
@@ -631,6 +638,8 @@ update do
             
             @enemyarray[i][1] += @enemyarray[i][5]
 
+
+            # Kod som bestämmer hur enemy ska sikta och ifall spelaren är inom en viss radie till enemy för att bli upptäckt
             enemy_rotate_angle = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[0]
             enemy_unit_vector = mouse_angle(@player.x + @player.width/2, @player.y + @player.height/2, [@enemyarray[i][0].x + @enemyarray[i][0].width/2, @enemyarray[i][0].y + @enemyarray[i][0].height/2])[1]
             if (@enemyarray[i][0].x - @player.x).abs < 100*@pixel_scaler && (@enemyarray[i][0].y - @player.y).abs < 80*@pixel_scaler && ((@enemyarray[i][0].rotate - enemy_rotate_angle).abs < 90 || (@enemyarray[i][0].rotate - enemy_rotate_angle).abs > 270)
@@ -647,7 +656,7 @@ update do
                     @enemyarray[i][6] = 0
                     @shoot_sfx.play
                 end
-            else
+            else # Om enemy inte ser player
                 if i != 4
                     turn_angle = (@enemyarray[i][8] - 1).abs * -90
                 
@@ -689,7 +698,7 @@ update do
             i += 1
         end
 
-        # Enemy projectiles / hit reg -----------------------------
+        # Enemy projectiles / hit reg ----------------------------- Liam
 
         i = 0
         while i < @enemy_bullet_array.length
@@ -701,14 +710,14 @@ update do
             if @enemy_bullet_array[i][0].x > Window.width || @enemy_bullet_array[i][0].x < 0 || @enemy_bullet_array[i][0].y > Window.height || @enemy_bullet_array[i][0].y < 0
                 @enemy_bullet_array[i][0].remove
                 @enemy_bullet_array.delete_at(i)
-            elsif collision(@player, @enemy_bullet_array[i][0]) == true && @damaged != true
-                @health_index += 2
+            elsif collision(@player, @enemy_bullet_array[i][0]) == true && @damaged != true # Kollision med player
+                @health_index += 2 # HP
                 @enemy_bullet_array[i][0].remove
                 @enemy_bullet_array.delete_at(i)
                 @damaged = true
             else
                 j = 0
-                while j < @wall_array.length - 1
+                while j < @wall_array.length - 1 # Kollision med vägg
                     if collision(@wall_array[j][0], @enemy_bullet_array[i][0]) == true
                         @enemy_bullet_array[i][0].remove
                         @enemy_bullet_array.delete_at(i)
@@ -722,14 +731,14 @@ update do
             end
         end
 
-        # Player projectiles --------------------- 
+        # Player projectiles --------------------- Liam
 
         i = 0
         while i < @bullet_array.length
             if @bullet_array[i][1] == true
                 @bullet_array[i][4] += @bullet_array[i][2] * @bullet_speed
                 @bullet_array[i][5] += @bullet_array[i][3] * @bullet_speed
-                xy_array = xy_translate(@bullet_array[i][4], @bullet_array[i][5], @map)
+                xy_array = xy_translate(@bullet_array[i][4], @bullet_array[i][5], @map) # Placerar bullet på rätt koordinater relativt till mappen
                 @bullet_array[i][0].x = xy_array[0]
                 @bullet_array[i][0].y = xy_array[1]
                 @bullet_array[i][0].add
@@ -739,7 +748,7 @@ update do
                 else 
                     j = 0
                     while j < @enemyarray.length
-                        if collision(@enemyarray[j][0], @bullet_array[i][0]) == true
+                        if collision(@enemyarray[j][0], @bullet_array[i][0]) == true # Kollision med enemy
                             @bullet_array[i][1] = false
                             @bullet_array[i][0].remove
                             @enemyarray[j][7] -= 50
@@ -763,7 +772,7 @@ update do
                     
                     j = 0
                     while j < @wall_array.length - 1
-                        if collision(@wall_array[j][0], @bullet_array[i][0]) == true
+                        if collision(@wall_array[j][0], @bullet_array[i][0]) == true # kollision med väggen
                             @bullet_array[i][1] = false
                             @bullet_array[i][0].remove
                             j = @wall_array.length - 1
@@ -775,15 +784,15 @@ update do
             i += 1
         end
 
-        # Enemy death animation -------------------------
+        # Enemy death animation ------------------------- Liam
 
         i = 0
-        while i < @enemy_death_array.length
-            xy_array = xy_translate(@enemy_death_array[i][1], @enemy_death_array[i][2], @map)
+        while i < @enemy_death_array.length # För att inte ta bort enemysprites som går på railsen för då hade man behövt placera ut dom igen om vi lagt till respawn funktion
+            xy_array = xy_translate(@enemy_death_array[i][1], @enemy_death_array[i][2], @map) # relativa koordinater
             @enemy_death_array[i][0].x = xy_array[0]
             @enemy_death_array[i][0].y = xy_array[1]
             
-            if @enemy_death_array[i][3] > 40 && @enemy_death_array[i][3]%1 == 0
+            if @enemy_death_array[i][3] > 40 && @enemy_death_array[i][3]%1 == 0 # Flicker effekten
                 if @enemy_death_array[i][3]%2 == 0
                     @enemy_death_array[i][0].add
                 else
@@ -791,7 +800,7 @@ update do
                 end
             end
             if @enemy_death_array[i][3] < 50
-                @enemy_death_array[i][0].play
+                @enemy_death_array[i][0].play # Spela dödsanimation
                 @enemy_death_array[i][3] += 1
             else
                 @enemy_death_array[i][0].remove
@@ -800,21 +809,21 @@ update do
             i += 1
         end
 
-        # XY relative / wall placement -----------------------------------
+        # XY relative / wall placement ----------------------------------- Liam
 
         i = 0
-        while i < @wall_array.length
+        while i < @wall_array.length # Referera till helpfunctions
             xy_array = xy_translate(@wall_array[i][1], @wall_array[i][2], @map)
             @wall_array[i][0].x = xy_array[0]
             @wall_array[i][0].y = xy_array[1]
             i += 1
         end
 
-        # Player damage animation + healthbar animation -------------------------------------
+        # Player damage animation + healthbar animation ------------------------------------- Liam
 
         if @damaged
             if @damaged_timer%1 == 0
-                if @damaged_timer%2 == 0
+                if @damaged_timer%2 == 0 # Flicker effekten
                     @player.add
                 else 
                     @player.remove
@@ -828,26 +837,26 @@ update do
             @damaged_timer += 1
         end
         
-        @health_bar.play animation: :"#{@health_bar_array[@health_index]}"
+        @health_bar.play animation: :"#{@health_bar_array[@health_index]}" # Förlora hp, stränginterpolering
 
-        # gamestate ---------------------------------------------
+        # gamestate --------------------------------------------- Liam
 
         i = 0
-        @gamestate = 3
-        while i < @enemyarray.length     
+        @gamestate = 3 # 3 = win
+        while i < @enemyarray.length # kollar ifall alla fiender är döda
             if @enemyarray[i][7] != 0
-                @gamestate = 1
+                @gamestate = 1 # Om minst en fortfarande lever är spelet fortfarande igång
             end
             i += 1
         end
 
-        if @health_index == 10
-            @gamestate = 2
+        if @health_index == 10 # Om död
+            @gamestate = 2 # 2 = lose
         end
 
         
         
-        #debugging kod -----------------------------------------------------------------------------------------------------------------------
+        #debugging kod -------------------------------------------------------------- Oliver
         # @text.remove
         # @text = Text.new(
         #     "#{(get :fps).to_i} #{rotate_angle.to_i} #{@ammo_mag_ak}/#{@ammo_total_ak} #{@ammo_mag_pistol}/#{@ammo_total_pistol} ",
@@ -857,7 +866,7 @@ update do
         #     color: 'blue',
         # )
 
-        # Ammo HUD -------------------------------------------------------------------
+        # Ammo HUD ------------------------------------------------------------------- Oliver
 
         @text_ammo_mag_pistol.remove
         if @gun_selected == 1
@@ -924,10 +933,9 @@ update do
             @ak_siluette.add
         end
 
+        # WIN and LOSE ----------------------------------- Liam
 
-        # WIN and LOSE ------------------------------------------
-
-    elsif @gamestate == 2
+    elsif @gamestate == 2 # if lose 
         @fadeout.add
         @fadeout.z = 999
         @player.z = @fadeout.z + 1
@@ -942,7 +950,7 @@ update do
         end
         @death_timer += 1 
 
-    elsif @gamestate == 3
+    elsif @gamestate == 3 # If win
         @fadeout.add
         @fadeout.z = 999
         @player.z = @fadeout.z + 1
@@ -957,5 +965,5 @@ update do
     
 end
 
-show
+show # Låter programmet representera koden i ett fönster
 

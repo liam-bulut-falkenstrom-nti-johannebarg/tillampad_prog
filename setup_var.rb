@@ -191,7 +191,7 @@
     time: 100
 )
 
-#Från vänster til höger:sprite, walk dist, vilken rail, relativ x, relativ y, går fram eller tillbak, shoot tick, health, direction
+#Från vänster til höger: [0] = sprite, [1] = walk dist, [2] = vilken rail, [3] = relativ x, [4] = relativ y, [5] = går fram eller tillbak, [6] = shoot tick, [7] = health, [8] = direction
 # Hade varit bättre med dictionaries här för tydligare kod
 @enemyarray = [
     [Sprite.new('sprites\enemy_sprite.png', clip_width: 25, width: 25 * (@pixel_scaler-1), height: 25 * (@pixel_scaler-1), x: 100, y: 50, loop: true, time: 100), 0, 1, 0, 0, 1, 80, 100, 0],

@@ -7,7 +7,7 @@ def mouse_angle(mouse_x, mouse_y, player_center_array)
     if dist_x >= 0
         return [angle, [unit_vector[0], unit_vector[1]], [dist_x, dist_y]] 
     else
-        angle = -90 - (90 - Math.atan(dist_y/dist_x) * (180/(Math::PI))) 
+        angle = -90 - (90 - Math.atan(dist_y/dist_x) * (180/(Math::PI))) # Ruby2D räknar angles konstigt så måste parrera. Börjar inte på 0 grader längst till höger såsom i enhetscirkel
         return [angle, [unit_vector[0], unit_vector[1]], [dist_x, dist_y]]
     end 
 end
